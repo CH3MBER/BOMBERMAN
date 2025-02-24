@@ -12,16 +12,20 @@ import java.awt.Image;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Random;
 import java.awt.BorderLayout;
 import java.awt.Color;
 
-public class Laberintoa extends JFrame {
+@SuppressWarnings("deprecation")
+public class Laberintoa extends JFrame implements Observer{ //Modelo de vista, habria que hacer separacion para crear otra nueva clase para hacer de Eredua.
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JPanel matrizea;
 	private ArrayList<JLabel> gelaxkaZerrenda = null;			//Gelaxkak bilduko dituen kolekzioa
+	private BlokeZerrenda blokeak;
 
 	/**
 	 * Launch the application.
@@ -79,7 +83,7 @@ public class Laberintoa extends JFrame {
 			//lblNewLabel.setOpaque(true);
 			//lblNewLabel.setBackground(Color.blue);
 			//lblNewLabel.setBorder(BorderFactory.createLineBorder(Color.black));
-			Image argazki = new ImageIcon(this.getClass().getResource("hard5.png")).getImage();
+			Image argazki = new ImageIcon(this.getClass().getResource("BlokeGogorra.png")).getImage();
 			lblNewLabel.addComponentListener(new ComponentAdapter() { //Creo que habria que cambiar esto 
 	            @Override
 	            public void componentResized(ComponentEvent e) {
@@ -96,7 +100,7 @@ public class Laberintoa extends JFrame {
 			//lblNewLabel.setBackground(Color.CYAN);
 			//lblNewLabel.setBorder(BorderFactory.createLineBorder(Color.black));
 			if (ausazZenbakia()>0.4 && !((pL==0 && pZ==0)||(pL==0 && pZ==1)||(pL==1 && pZ==0))) {
-				Image argazki = new ImageIcon(this.getClass().getResource("soft1.png")).getImage();
+				Image argazki = new ImageIcon(this.getClass().getResource("BlokeBiguna.png")).getImage();
 				lblNewLabel.addComponentListener(new ComponentAdapter() { //Creo que habria que cambiar esto 
 		            @Override
 		            public void componentResized(ComponentEvent e) {
@@ -120,9 +124,15 @@ public class Laberintoa extends JFrame {
 	
 	private double ausazZenbakia() {								//Ausaz zenbaki bat aukeratzen du, bloke biguna edo etsai bat sortzeko
 		Random ram = new Random();
-		double aukera = ram.nextDouble(1);
+		double aukera = ram.nextDouble();
 		//System.out.print("\n"+aukera);
 		return aukera;
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	
