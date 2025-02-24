@@ -13,6 +13,7 @@ public class LaberintoEredua extends Observable{
 	private ArrayList<JLabel> gelaxkaZerrenda = null;//Gelaxkak bilduko dituen kolekzioa
 	private final int zutabe = 17;
 	private final int errenkada = 11;
+	//private Jokalaria bonberman;
 	
 	public LaberintoEredua() {
 		matrizeaSortu();

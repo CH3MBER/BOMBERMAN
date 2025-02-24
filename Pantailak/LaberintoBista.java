@@ -64,7 +64,7 @@ public class LaberintoBista extends JFrame implements Observer{ //Modelo de vist
 		if(matrizea==null) {
 			matrizea = new JPanel();
 			matrizea.setLayout(new GridLayout(11, 17, 0, 0)); 	//Matrizearen dimentsioak zeintzuk izango diren zehazten ditu
-			hasieratuGelaxkak();									//Matrizea sortzen du
+			hasieratuGelaxkak();	//Matrizea sortzen du
 		}
 		return matrizea;
 	}
