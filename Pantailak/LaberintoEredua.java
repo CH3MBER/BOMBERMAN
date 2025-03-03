@@ -18,8 +18,8 @@ public class LaberintoEredua extends Observable{
 	public LaberintoEredua() {
 		matrizeaSortu();
 		this.bonberman = new JokalariEredu(0,0);
-		//setChanged();
-		//notifyObservers();
+		setChanged();
+		notifyObservers();
 	}
 	
 	private void matrizeaSortu() { 								//Matrizea sortzen du
@@ -51,6 +51,16 @@ public class LaberintoEredua extends Observable{
 
 	public JokalariEredu getBomberman() {
 		return this.bonberman;
+	}
+	
+	public void mugitu(int i, int j) {
+		this.bonberman.setAurrekoX(this.bonberman.getX());
+		this.bonberman.setAurrekoY(this.bonberman.getY());
+		this.bonberman.setX(this.bonberman.getX()+i);
+		this.bonberman.setY(this.bonberman.getY()+j);
+		
+		setChanged();
+		notifyObservers();
 	}
 	
 }

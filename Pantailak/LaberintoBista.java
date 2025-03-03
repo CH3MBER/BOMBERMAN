@@ -34,7 +34,7 @@ public class LaberintoBista extends JFrame implements Observer{
 	private int X;
 	private int Y;
 	private JokalariBista bomberman;
-	//private Kontroladore kontroladore = null;
+	private Kontroladore kontroladore = null;
 	private int kont = 10;
 	//private LaberintoEredua eredua;
 	//private BlokeZerrenda blokeak;
@@ -66,7 +66,7 @@ public class LaberintoBista extends JFrame implements Observer{
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
 		contentPane.add(sortuLaberintoa(), BorderLayout.CENTER);
-		//addKeyListener(getKontroladore());
+		addKeyListener(getKontroladore());
 		setLocationRelativeTo(null);
 		setVisible(true);
 		setFocusable(true);
@@ -86,12 +86,13 @@ public class LaberintoBista extends JFrame implements Observer{
 		for (int i=0; i<LaberintoEredua.getLabEredua().getGelaZerr().size();i++) {
 			koordenatuakLortu(i);
 			JLabel label = LaberintoEredua.getLabEredua().getGelaZerr().get(i);
-			if (LaberintoEredua.getLabEredua().getBomberman().getX()==X && LaberintoEredua.getLabEredua().getBomberman().getY()==Y) {
+			if (X==0 && Y==0) { //LaberintoEredua.getLabEredua().getBomberman().getX()==X && LaberintoEredua.getLabEredua().getBomberman().getY()==Y
+				Image argazki = new ImageIcon(this.getClass().getResource("WhiteFront1.png")).getImage();
 				label.addComponentListener(new ComponentAdapter() { //Creo que habria que cambiar esto 
 		            @Override
 		            public void componentResized(ComponentEvent e) {
 		                if (label.getWidth() > 0 && label.getHeight() > 0) {
-		                    Image scaledImage = LaberintoEredua.getLabEredua().getBomberman().getSprite().getScaledInstance(label.getWidth(),label.getHeight(),Image.SCALE_DEFAULT);
+		                    Image scaledImage = argazki.getScaledInstance(label.getWidth(),label.getHeight(),Image.SCALE_DEFAULT);;
 		                    label.setIcon(new ImageIcon(scaledImage));
 		                }
 		            }
@@ -99,10 +100,7 @@ public class LaberintoBista extends JFrame implements Observer{
 				//label.addKeyListener(getKontroladore());
 			}
 			else if (X%2!=0 && Y%2!=0) {
-				//lblNewLabel.setOpaque(true);
-				//lblNewLabel.setBackground(Color.blue);
-				//lblNewLabel.setBorder(BorderFactory.createLineBorder(Color.black));
-				Image argazki = new ImageIcon(this.getClass().getResource("hard5.png")).getImage();
+				Image argazki = new ImageIcon(this.getClass().getResource("BlokeGogorra.png")).getImage();
 				label.addComponentListener(new ComponentAdapter() { //Creo que habria que cambiar esto 
 		            public void componentResized(ComponentEvent e) {
 		                if (label.getWidth() > 0 && label.getHeight() > 0) {
@@ -113,11 +111,8 @@ public class LaberintoBista extends JFrame implements Observer{
 		         });
 			}
 			else {
-				//lblNewLabel.setOpaque(true);
-				//lblNewLabel.setBackground(Color.CYAN);
-				//lblNewLabel.setBorder(BorderFactory.createLineBorder(Color.black));
 				if (LaberintoEredua.getLabEredua().ausazZenbakia()>0.4 && !((X==0 && Y==0)||(X==0 && Y==1)||(X==1 && Y==0))) {
-					Image argazki = new ImageIcon(this.getClass().getResource("soft1.png")).getImage();
+					Image argazki = new ImageIcon(this.getClass().getResource("BlokeBiguna.png")).getImage();
 					label.addComponentListener(new ComponentAdapter() { //Creo que habria que cambiar esto 
 			            @Override
 			            public void componentResized(ComponentEvent e) {
@@ -145,7 +140,7 @@ public class LaberintoBista extends JFrame implements Observer{
 	}
 
 
-	/*private Kontroladore getKontroladore() {
+	private Kontroladore getKontroladore() {
 		if (kontroladore == null) {
 			kontroladore = new Kontroladore();
 		}
@@ -153,7 +148,7 @@ public class LaberintoBista extends JFrame implements Observer{
 	}
 	
 	private void mugitu(LaberintoEredua lE) {
-		TimerTask timerTask = new TimerTask() {
+		/*TimerTask timerTask = new TimerTask() {
 			@Override
 			public void run() {
 				updateKont();
@@ -161,23 +156,23 @@ public class LaberintoBista extends JFrame implements Observer{
 		};
 		Timer timer = new Timer();
 		timer.scheduleAtFixedRate(timerTask, 0, 50);
+		*/
+		((JLabel) matrizea.getComponent(getIndex(lE.getBomberman().getAurrekoX(), lE.getBomberman().getAurrekoY()))).setIcon(null);
 		
-		((JLabel) matrizea.getComponent(getIndex(0, 0))).setIcon(null);
-		
-        // Mover la imagen a la nueva posición
+        // Mover la imagen a la nueva posicion
 		Image argazki = new ImageIcon(this.getClass().getResource("whitefront1.png")).getImage();
-		Image scaledImage = argazki.getScaledInstance(matrizea.getComponent(getIndex(0,0)).getWidth(),matrizea.getComponent(getIndex(0,0)).getHeight(),Image.SCALE_DEFAULT);
-		((JLabel) matrizea.getComponent(getIndex(0,1))).setIcon(new ImageIcon(scaledImage));
+		Image scaledImage = argazki.getScaledInstance(matrizea.getComponent(getIndex(lE.getBomberman().getX(),lE.getBomberman().getY())).getWidth(),matrizea.getComponent(getIndex(lE.getBomberman().getX(),lE.getBomberman().getY())).getHeight(),Image.SCALE_DEFAULT);
+		((JLabel) matrizea.getComponent(getIndex(lE.getBomberman().getX(),lE.getBomberman().getY()))).setIcon(new ImageIcon(scaledImage));
 	}
 	
-	private void updateKont() {
+	/*private void updateKont() {
 		kont--;
 		if (kont == 0) {
 			Image argazki = new ImageIcon(this.getClass().getResource("blackdown4.png")).getImage();
 			Image scaledImage = argazki.getScaledInstance(matrizea.getComponent(getIndex(0,0)).getWidth(),matrizea.getComponent(getIndex(0,0)).getHeight(),Image.SCALE_DEFAULT);
 			((JLabel) matrizea.getComponent(getIndex(0,1))).setIcon(new ImageIcon(scaledImage));
 		}
-	}
+	}*/
 	
 	
 	private int getIndex(int fila, int columna) {
@@ -186,32 +181,37 @@ public class LaberintoBista extends JFrame implements Observer{
 	
 	private class Kontroladore implements KeyListener{
 		public void keyPressed(KeyEvent e) {
+			LaberintoEredua lE = LaberintoEredua.getLabEredua();
 			if (e.getKeyCode() == (KeyEvent.VK_RIGHT)) {
+				lE.mugitu(0,1);
 			}
-			mugitu(LaberintoEredua.getLabEredua());
+			if (e.getKeyCode() == KeyEvent.VK_UP) {
+				lE.mugitu(0,-17);
+			}
+			if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+				lE.mugitu(0,17);
+			}
+			if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+				lE.mugitu(0,-1);
+			}
 		}
 
 		@Override
 		public void keyTyped(KeyEvent e) {
 			// TODO Auto-generated method stub
-			if (e.getKeyCode() == (KeyEvent.VK_RIGHT)) {
-			}
 		}
 
 		@Override
 		public void keyReleased(KeyEvent e) {
 			// TODO Auto-generated method stub
-			if (e.getKeyCode() == (KeyEvent.VK_RIGHT)) {
-			}
 		}
 	
-	
-}*/
+}
 
 	@Override
 	public void update(Observable o, Object arg) {
 		// TODO Auto-generated method stub
-		//LaberintoEredua LE = LaberintoEredua.getLabEredua();
-		//mugitu(LE);
+		LaberintoEredua LE = LaberintoEredua.getLabEredua();
+		mugitu(LE);
 	}
 }
