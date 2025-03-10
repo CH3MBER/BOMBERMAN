@@ -1,6 +1,8 @@
 package Pantailak;
 
 import java.awt.EventQueue;
+import java.awt.Graphics;
+
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -29,13 +31,13 @@ import java.awt.Color;
 public class LaberintoBista extends JFrame implements Observer{
 
 	private static final long serialVersionUID = 1L;
+	private static LaberintoBista nLB = null;
 	private JPanel contentPane;
 	private JPanel matrizea;
-	private int X;
-	private int Y;
-	private JokalariBista bomberman;
+	//private int X;
+	//private int Y;
 	private Kontroladore kontroladore = null;
-	private int kont = 10;
+	//private int kont = 10;
 	//private LaberintoEredua eredua;
 	//private BlokeZerrenda blokeak;
 
@@ -58,20 +60,35 @@ public class LaberintoBista extends JFrame implements Observer{
 	/**
 	 * Create the frame.
 	 */
-	public LaberintoBista() {
+	private LaberintoBista() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 750, 500);
-		contentPane = new JPanel();
+		contentPane = new JPanel() {
+	        private Image background = new ImageIcon(getClass().getResource("Basamortua.png")).getImage();
+	        @Override
+	        protected void paintComponent(Graphics g) {
+	            super.paintComponent(g);
+	            g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
+	        }
+	    };
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
 		contentPane.add(sortuLaberintoa(), BorderLayout.CENTER);
+		setContentPane(contentPane);
 		addKeyListener(getKontroladore());
 		setLocationRelativeTo(null);
 		setVisible(true);
 		setResizable(false);
 		setFocusable(true);
+		matrizea.setOpaque(false);
 		LaberintoEredua.getLabEredua().addObserver(this);//Lehioa pantaila erdian egoteko
+	}
+	
+	public static LaberintoBista getLabBista() {
+		if(nLB == null) {
+			nLB = new LaberintoBista();
+		}
+		return nLB;
 	}
 	
 	private JPanel sortuLaberintoa() {								//Matrizea hartzen du
@@ -84,35 +101,22 @@ public class LaberintoBista extends JFrame implements Observer{
 	}
 
 	private void hasieratuGelaxkak() {
-		for (int i=0; i<LaberintoEredua.getLabEredua().getGelaZerr().size();i++) {
-			koordenatuakLortu(i);
-			JLabel label = LaberintoEredua.getLabEredua().getGelaZerr().get(i);
-			if (X==0 && Y==0) { //LaberintoEredua.getLabEredua().getBomberman().getX()==X && LaberintoEredua.getLabEredua().getBomberman().getY()==Y
-				Image argazki = new ImageIcon(this.getClass().getResource("WhiteFront1.png")).getImage();
-				label.addComponentListener(new ComponentAdapter() { //Creo que habria que cambiar esto 
-		            @Override
-		            public void componentResized(ComponentEvent e) {
-		                if (label.getWidth() > 0 && label.getHeight() > 0) {
-		                    Image scaledImage = argazki.getScaledInstance(label.getWidth(),label.getHeight(),Image.SCALE_DEFAULT);;
-		                    label.setIcon(new ImageIcon(scaledImage));
-		                }
-		            }
-		        });
-				//label.addKeyListener(getKontroladore());
+		ArrayList<GelaxkaEredu> lEz = LaberintoEredua.getLabEredua().getGelaZerr();
+		for (int i=0; i<lEz.size();i++) {
+			//koordenatuakLortu(i);
+			GelaxkaEredu eredu = lEz.get(i);
+			JLabel label = new Gelaxka(eredu);
+			if (lEz.get(i).getTipo()==5) { //LaberintoEredua.getLabEredua().getBomberman().getX()==X && LaberintoEredua.getLabEredua().getBomberman().getY()==Y
+				eredu.setTipo(5);
 			}
-			else if (X%2!=0 && Y%2!=0) {
-				Image argazki = new ImageIcon(this.getClass().getResource("BlokeGogorra.png")).getImage();
-				label.addComponentListener(new ComponentAdapter() { //Creo que habria que cambiar esto 
-		            public void componentResized(ComponentEvent e) {
-		                if (label.getWidth() > 0 && label.getHeight() > 0) {
-		                    Image scaledImage = argazki.getScaledInstance(label.getWidth(),label.getHeight(),Image.SCALE_DEFAULT);
-		                    label.setIcon(new ImageIcon(scaledImage));
-		                }
-		            }
-		         });
+			else if (lEz.get(i).getTipo()==1) {
+				eredu.setTipo(1);
 			}
 			else {
-				if (LaberintoEredua.getLabEredua().ausazZenbakia()>0.4 && !((X==0 && Y==0)||(X==0 && Y==1)||(X==1 && Y==0))) {
+				if (lEz.get(i).getTipo()==2) {//LaberintoEredua.getLabEredua().ausazZenbakia()>0.4 && !((X==0 && Y==0)||(X==0 && Y==1)||(X==1 && Y==0))
+					eredu.setTipo(2);
+					/*GelaxkaEredu eredu = new GelaxkaEredu(2);
+					//JLabel label = new JLabel();//new Gelaxka(eredu);
 					Image argazki = new ImageIcon(this.getClass().getResource("BlokeBiguna.png")).getImage();
 					label.addComponentListener(new ComponentAdapter() { //Creo que habria que cambiar esto 
 			            @Override
@@ -123,13 +127,14 @@ public class LaberintoBista extends JFrame implements Observer{
 			                }
 			            }
 			        });
-				}
+					
+				*/}
 			}
 			matrizea.add(label);
 		}
 	}	
 		
-	private void koordenatuakLortu(int posizioa) {
+	/*private void koordenatuakLortu(int posizioa) {
 		if (posizioa<17) {
 			X = posizioa;
 			Y = 0;
@@ -138,7 +143,7 @@ public class LaberintoBista extends JFrame implements Observer{
 			X = posizioa%17;
 			Y = posizioa/17;
 		}
-	}
+	}*/
 
 
 	private Kontroladore getKontroladore() {
@@ -149,35 +154,30 @@ public class LaberintoBista extends JFrame implements Observer{
 	}
 	
 	private void mugitu(LaberintoEredua lE) {
-		/*TimerTask timerTask = new TimerTask() {
-			@Override
-			public void run() {
-				updateKont();
-			}		
-		};
-		Timer timer = new Timer();
-		timer.scheduleAtFixedRate(timerTask, 0, 50);
-		*/
 		((JLabel) matrizea.getComponent(getIndex(lE.getBomberman().getAurrekoY(), lE.getBomberman().getAurrekoX()))).setIcon(null);
 		
         // Mover la imagen a la nueva posicion
-		Image argazki = new ImageIcon(this.getClass().getResource("whitefront1.png")).getImage();
+		/*Image argazki = new ImageIcon(this.getClass().getResource("Bonberman.png")).getImage();
 		Image scaledImage = argazki.getScaledInstance(matrizea.getComponent(getIndex(lE.getBomberman().getY(),lE.getBomberman().getX())).getWidth(),matrizea.getComponent(getIndex(lE.getBomberman().getY(),lE.getBomberman().getX())).getHeight(),Image.SCALE_DEFAULT);
 		((JLabel) matrizea.getComponent(getIndex(lE.getBomberman().getY(),lE.getBomberman().getX()))).setIcon(new ImageIcon(scaledImage));
+	*/}
+	
+	private int getIndex(int err, int zut) {
+	    return err * 17 + zut;
 	}
 	
-	/*private void updateKont() {
-		kont--;
-		if (kont == 0) {
-			Image argazki = new ImageIcon(this.getClass().getResource("blackdown4.png")).getImage();
-			Image scaledImage = argazki.getScaledInstance(matrizea.getComponent(getIndex(0,0)).getWidth(),matrizea.getComponent(getIndex(0,0)).getHeight(),Image.SCALE_DEFAULT);
-			((JLabel) matrizea.getComponent(getIndex(0,1))).setIcon(new ImageIcon(scaledImage));
-		}
-	}*/
-	
-	
-	private int getIndex(int fila, int columna) {
-	    return fila * 17 + columna;
+	private void borratu(LaberintoEredua lE) {
+		//if(!((lE.getBomberman().getX()-1<0) || (lE.getBomberman().getY()-1<0) || (lE.getBomberman().getX()+1>16) || (lE.getBomberman().getY()+1>10))){
+			
+			
+			
+			
+		//}
+		//	if(lE.getBomberman().getX()-1>=0) ((JLabel) matrizea.getComponent(getIndex(lE.getBomberman().getY(), lE.getBomberman().getX()-1))).setIcon(null);
+		//	if(lE.getBomberman().getX()+1<=16) ((JLabel) matrizea.getComponent(getIndex(lE.getBomberman().getY(), lE.getBomberman().getX()+1))).setIcon(null);
+		//	if(lE.getBomberman().getY()-1>=0) ((JLabel) matrizea.getComponent(getIndex(lE.getBomberman().getY()-1, lE.getBomberman().getX()))).setIcon(null);
+		//	if(lE.getBomberman().getY()+1<=10) ((JLabel) matrizea.getComponent(getIndex(lE.getBomberman().getY()+1, lE.getBomberman().getX()))).setIcon(null);
+			
 	}
 	
 	private class Kontroladore implements KeyListener{
@@ -195,6 +195,10 @@ public class LaberintoBista extends JFrame implements Observer{
 			if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 				lE.mugitu(-1,0);
 			}
+			if (e.getKeyCode() == KeyEvent.VK_A) {
+				lE.ingurunea();
+			}
+			
 		}
 
 		@Override
@@ -213,6 +217,11 @@ public class LaberintoBista extends JFrame implements Observer{
 	public void update(Observable o, Object arg) {
 		// TODO Auto-generated method stub
 		LaberintoEredua LE = LaberintoEredua.getLabEredua();
+		LaberintoBista.getLabBista();
 		mugitu(LE);
+		if (LE.getBorratu()) {
+			borratu(LE);
+			LE.kenduBorratu();
+		}
 	}
 }
