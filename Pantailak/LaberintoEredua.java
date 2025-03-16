@@ -1,7 +1,9 @@
 package Pantailak;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Observable;
+import java.util.Queue;
 import java.util.Random;
 
 import javax.swing.JLabel;
@@ -17,6 +19,8 @@ public class LaberintoEredua extends Observable{
 	private final int errenkada = 11;
 	private JokalariEredu bonberman;
 	private boolean borratu = false;
+	private Queue<Integer> proba = new LinkedList<Integer>();
+	private int lehenLibre = 1;
 	
 	
 	////////////ERAIKITZAILEA////////////
@@ -24,6 +28,7 @@ public class LaberintoEredua extends Observable{
 		this.bZerr = new BlokeZerrenda();
 		matrizeaSortu();
 		this.bonberman = new JokalariEredu(0,0);
+		//bZerr.;
 		setChanged();
 		notifyObservers();
 	}
@@ -56,15 +61,49 @@ public class LaberintoEredua extends Observable{
 				else if (lerro==0 && zut==0) {
 					gel = new GelaxkaEredu(5);
 					getGelaZerr().add(gel);	//Bonberman
+					bZerr.gehituBloke(new Bloke(null,zut,lerro));
 				}
 				else {
 					gel = new GelaxkaEredu(0);
 					getGelaZerr().add(gel);	//Hutsik
+					bZerr.gehituBloke(new Bloke(null,zut,lerro));
 				}
 			}
 		}
 	}
+
+	////////////GETTER eta SETTER////////////
+	public ArrayList<GelaxkaEredu> getGelaZerr() {
+		if(gelaxkaZerrenda == null) {
+			gelaxkaZerrenda = new ArrayList<>();
+		}
+		return gelaxkaZerrenda;
+	}
 	
+	public BlokeZerrenda getbZerr() {
+		return bZerr;
+	}
+
+	public JokalariEredu getBomberman() {
+		return this.bonberman;
+	}
+
+	public int getZutabe() {
+		return zutabe;
+	}
+
+	public int getErrenkada() {
+		return errenkada;
+	}
+
+	public boolean getBorratu() {
+		return this.borratu;
+	}
+	
+	public void setBorratu(boolean borratu) {
+		this.borratu = borratu;
+	}
+
 	////////////AUSAZKO ZENBAKIA////////////
 	private double ausazZenbakia() {
 		Random ram = new Random();
@@ -73,58 +112,57 @@ public class LaberintoEredua extends Observable{
 		return aukera;
 	}
 
-
-	public ArrayList<GelaxkaEredu> getGelaZerr() {
-		if(gelaxkaZerrenda == null) {
-			gelaxkaZerrenda = new ArrayList<>();
-		}
-		return gelaxkaZerrenda;
-	}
-	
-	public JokalariEredu getBomberman() {
-		return this.bonberman;
-	}
-	
 	////////////JOKALARIA MUGITU////////////
 	public void mugitu(int i, int j) {
 		boolean mugitu = false;
+		boolean erre = false;
 		if (!((this.bonberman.getX()+i<0) || (this.bonberman.getY()+j<0) || (this.bonberman.getX()+i>16) || (this.bonberman.getY()+j>10))){	//Bonberman-a tarteetan dagoela konprobatzen du
-			if(!((getGelaZerr().get((this.bonberman.getY()+j)*17+this.bonberman.getX()+i).getTipo() == 1) || (getGelaZerr().get((this.bonberman.getY()+j)*17+this.bonberman.getX()+i).getTipo() == 2))){	//Bonberman-a blokeekin ez dela joko konprobatzen du
+			if(!((getGelaZerr().get((this.bonberman.getY()+j)*17+this.bonberman.getX()+i).getTipo() == 1) || (getGelaZerr().get((this.bonberman.getY()+j)*17+this.bonberman.getX()+i).getTipo() == 2) || (getGelaZerr().get((this.bonberman.getY()+j)*17+this.bonberman.getX()+i).getTipo() == 3))){	//Bonberman-a blokeekin ez dela joko konprobatzen du
 				this.bonberman.setAurrekoY(this.bonberman.getY());	//Lehengo aurreko posizioak eguneratzen ditu eta gero helduko den posizioa
 				this.bonberman.setY(this.bonberman.getY()+j);
 				this.bonberman.setAurrekoX(this.bonberman.getX());
 				this.bonberman.setX(this.bonberman.getX()+i);
-				getGelaZerr().get((this.bonberman.getY())*17+this.bonberman.getX()).setTipo(5);
 				mugitu = true;
+				if (getGelaZerr().get((this.bonberman.getY())*17+this.bonberman.getX()).getTipo() == 4) {
+					getGelaZerr().get((this.bonberman.getY())*17+this.bonberman.getX()).setTipo(12);
+					erre = true;
+				}
+				else {
+					getGelaZerr().get((this.bonberman.getY())*17+this.bonberman.getX()).setTipo(5);
+					System.out.print("Mugitu");
+				}
 			}	
 		}
 		
-		switch (i){	//Mugimenduaren arabera "sprite" bat edo beste bat erakutsiko du
-		case 0:
-			getGelaZerr().get((this.bonberman.getY())*17+this.bonberman.getX()).setTipo(getGelaZerr().get((this.bonberman.getY())*17+this.bonberman.getX()).getTipo());
-			break;
-		case -1:
-			getGelaZerr().get((this.bonberman.getY())*17+this.bonberman.getX()).setTipo(6);
-			break;
-		case 1:
-			getGelaZerr().get((this.bonberman.getY())*17+this.bonberman.getX()).setTipo(7);
-			break;
-		}
-		switch (j){
-		case 0:
-			getGelaZerr().get((this.bonberman.getY())*17+this.bonberman.getX()).setTipo(getGelaZerr().get((this.bonberman.getY())*17+this.bonberman.getX()).getTipo());
-			break;
-		case -1:
-			if(getGelaZerr().get((this.bonberman.getAurrekoY())*17+this.bonberman.getAurrekoX()).getTipo() == 8){
-				getGelaZerr().get((this.bonberman.getY())*17+this.bonberman.getX()).setTipo(10);
+		if(!erre) {
+			switch (i){	//Mugimenduaren arabera "sprite" bat edo beste bat erakutsiko du
+			case 0:
+				getGelaZerr().get((this.bonberman.getY())*17+this.bonberman.getX()).setTipo(getGelaZerr().get((this.bonberman.getY())*17+this.bonberman.getX()).getTipo());
+				break;
+			case -1:
+				getGelaZerr().get((this.bonberman.getY())*17+this.bonberman.getX()).setTipo(6);
+				break;
+			case 1:
+				getGelaZerr().get((this.bonberman.getY())*17+this.bonberman.getX()).setTipo(7);
+				break;
 			}
-			else {
-				getGelaZerr().get((this.bonberman.getY())*17+this.bonberman.getX()).setTipo(8);
+			
+			switch (j){
+			case 0:
+				getGelaZerr().get((this.bonberman.getY())*17+this.bonberman.getX()).setTipo(getGelaZerr().get((this.bonberman.getY())*17+this.bonberman.getX()).getTipo());
+				break;
+			case -1:
+				if(getGelaZerr().get((this.bonberman.getAurrekoY())*17+this.bonberman.getAurrekoX()).getTipo() == 8){
+					getGelaZerr().get((this.bonberman.getY())*17+this.bonberman.getX()).setTipo(10);
+				}
+				else {
+					getGelaZerr().get((this.bonberman.getY())*17+this.bonberman.getX()).setTipo(8);
+				}
+				break;
+			case 1:
+				getGelaZerr().get((this.bonberman.getY())*17+this.bonberman.getX()).setTipo(9);
+				break;
 			}
-			break;
-		case 1:
-			getGelaZerr().get((this.bonberman.getY())*17+this.bonberman.getX()).setTipo(9);
-			break;
 		}
 		
 		if (mugitu) //Gelaxka hutsik dagoela adierazteko balio du, alegia, Bonberman-a mugitu da.
@@ -134,53 +172,72 @@ public class LaberintoEredua extends Observable{
 		notifyObservers();
 	}
 	
-	public boolean getBorratu() {
-		return this.borratu;
-	}
-	
-	public boolean kenduBorratu() {
-		return this.borratu = false;
-	}
-	
-	
 	//KENDU HEMENDIK BONBA METODOA
-	public void ingurunea() {
-		this.borratu = false;
-		int pos = (this.bonberman.getY())*17+this.bonberman.getX();	
-		if(this.bonberman.getX()-1>=0 && !(getGelaZerr().get((this.bonberman.getY())*17+this.bonberman.getX()-1).getTipo() == 1)) {
-			//pos = (this.bonberman.getY())*17+this.bonberman.getX()+1*(-1);
-			pos = pos-1;
-			getGelaZerr().get((this.bonberman.getY())*17+this.bonberman.getX()-1).setTipo(0);
-			bZerr.deleteBloke(bZerr.getBloke((this.bonberman.getY())*17+this.bonberman.getX()-1));
-			System.out.print("\n"+pos);
-			borratu = true;
-		}
-		if(this.bonberman.getX()+1<=16 && !(getGelaZerr().get((this.bonberman.getY())*17+this.bonberman.getX()+1).getTipo() == 1)) {
-			//pos = this.bonberman.getY()*17+this.bonberman.getX()+1;
-			pos = pos+1;
-			getGelaZerr().get((this.bonberman.getY())*17+this.bonberman.getX()+1).setTipo(0);
-			bZerr.deleteBloke(bZerr.getBloke((this.bonberman.getY())*17+this.bonberman.getX()+1));
-			System.out.print("\n"+pos);
-			borratu = true;
-		}	
-		if(this.bonberman.getY()-1>=0 && !(getGelaZerr().get((this.bonberman.getY()-1)*17+this.bonberman.getX()).getTipo() == 1)) { 
-			//pos = (this.bonberman.getY()-1)*17+this.bonberman.getX();
-			pos = pos-17;
-			getGelaZerr().get((this.bonberman.getY()-1)*17+this.bonberman.getX()).setTipo(0);
-			bZerr.deleteBloke(bZerr.getBloke((this.bonberman.getY()-1)*17+this.bonberman.getX()));
-			System.out.print("\n"+pos);
-			borratu = true;
-		}
-		if(this.bonberman.getY()+1<=10 && !(getGelaZerr().get((this.bonberman.getY()+1)*17+this.bonberman.getX()).getTipo() == 1)) {
-			//pos = (this.bonberman.getY()+1)*17+this.bonberman.getX();
-			pos = pos+17;
-			getGelaZerr().get((this.bonberman.getY()+1)*17+this.bonberman.getX()).setTipo(0);
-			bZerr.deleteBloke(bZerr.getBloke((this.bonberman.getY()+1)*17+this.bonberman.getX()));
-			System.out.print("\n"+pos);
-			borratu = true;
-		}
-		setChanged();
-		notifyObservers();
+	public void bonbaJarri() {
+		Bonba bonba = new Bonba(3, this.bonberman.getX(), this.bonberman.getY());
+		proba.add(lehenLibre);
+		System.out.print(proba.peek());
+		getGelaZerr().get(this.bonberman.getY()*17+this.bonberman.getX()).setTipo(3);
+		this.bonberman.setY(this.bonberman.getAurrekoY());
+		this.bonberman.setX(this.bonberman.getAurrekoX());
+		getGelaZerr().get(this.bonberman.getY()*17+this.bonberman.getX()).setTipo(5);
+		lehenLibre++;
 	}
+	
+	public void apurtuBlokeak(int zut, int lerr) {
+		int pos = lerr*17+zut;	
+		bZerr.blokeakInprimatu();
+		proba.remove();
+		System.out.print(proba.peek());
+		if(zut-1>=0 && !(getGelaZerr().get(lerr*17+(zut-1)).getTipo() == 1)) {
+			pos = pos-1;
+			Sua sua = new Sua(zut-1,lerr);
+			if (this.bonberman.getY()*17+this.bonberman.getX() == lerr*17+(zut-1)) {
+				getGelaZerr().get(lerr*17+(zut-1)).setTipo(12);
+				this.bonberman.setBizitza(false);
+			}
+			else
+				getGelaZerr().get(lerr*17+(zut-1)).setTipo(4);
+			bZerr.getBloke(lerr*17+(zut-1));
+			System.out.print("\n"+pos);
+		}
+		if(zut+1<=16 && !(getGelaZerr().get(lerr*17+(zut+1)).getTipo() == 1)) {
+			pos = pos+1;
+			Sua sua = new Sua(zut+1,lerr);
+			if (this.bonberman.getY()*17+this.bonberman.getX() == lerr*17+(zut+1)) {
+				getGelaZerr().get(lerr*17+(zut+1)).setTipo(12);
+				this.bonberman.setBizitza(false);
+			}
+			else
+				getGelaZerr().get(lerr*17+(zut+1)).setTipo(4);
+			bZerr.getBloke(lerr*17+(zut+1));
+			System.out.print("\n"+pos);
+		}	
+		if(lerr-1>=0 && !(getGelaZerr().get((lerr-1)*17+zut).getTipo() == 1)) { 
+			pos = pos-17;
+			Sua sua = new Sua(zut,lerr-1);
+			if (this.bonberman.getY()*17+this.bonberman.getX() == (lerr-1)*17+zut){
+				getGelaZerr().get((lerr-1)*17+zut).setTipo(12);
+				this.bonberman.setBizitza(false);
+			}
+			else
+				getGelaZerr().get((lerr-1)*17+zut).setTipo(4);
+			bZerr.getBloke((lerr-1)*17+zut).setMota(null);
+			System.out.print("\n"+pos);
+		}
+		if(lerr+1<=10 && !(getGelaZerr().get((lerr+1)*17+zut).getTipo() == 1)) {
+			pos = pos+17;
+			Sua sua = new Sua(zut,lerr+1);
+			if (this.bonberman.getY()*17+this.bonberman.getX() == (lerr+1)*17+zut) {
+				getGelaZerr().get((lerr+1)*17+zut).setTipo(12);
+				this.bonberman.setBizitza(false);
+			}
+			else
+				getGelaZerr().get((lerr+1)*17+zut).setTipo(4);
+			bZerr.getBloke((lerr+1)*17+zut).setMota(null);
+			System.out.print("\n"+pos);
+		}
+	}
+	
 	
 }

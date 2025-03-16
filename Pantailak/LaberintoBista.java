@@ -37,9 +37,6 @@ public class LaberintoBista extends JFrame implements Observer{
 	//private int X;
 	//private int Y;
 	private Kontroladore kontroladore = null;
-	//private int kont = 10;
-	//private LaberintoEredua eredua;
-	//private BlokeZerrenda blokeak;
 
 	/**
 	 * Launch the application.
@@ -60,8 +57,14 @@ public class LaberintoBista extends JFrame implements Observer{
 	/**
 	 * Create the frame.
 	 */
-	public LaberintoBista() {
+	private LaberintoBista() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		inizializatu();
+		LaberintoEredua.getLabEredua().addObserver(this);
+		System.out.print("\nJa");
+	}
+	
+	private void inizializatu() {
 		setBounds(100, 100, 750, 500);
 		contentPane = new JPanel() {
 	        private Image background = new ImageIcon(getClass().getResource("Basamortua.png")).getImage();
@@ -76,12 +79,10 @@ public class LaberintoBista extends JFrame implements Observer{
 		contentPane.add(sortuLaberintoa(), BorderLayout.CENTER);
 		setContentPane(contentPane);
 		addKeyListener(getKontroladore());
-		setLocationRelativeTo(null);
+		setLocationRelativeTo(null);	//Lehioa pantaila erdian egoteko
 		setVisible(true);
 		setResizable(false);
 		setFocusable(true);
-		matrizea.setOpaque(false);
-		LaberintoEredua.getLabEredua().addObserver(this);//Lehioa pantaila erdian egoteko
 	}
 	
 	public static LaberintoBista getLabBista() {
@@ -96,6 +97,7 @@ public class LaberintoBista extends JFrame implements Observer{
 			matrizea = new JPanel();
 			matrizea.setLayout(new GridLayout(11, 17, 0, 0)); 	//Matrizearen dimentsioak zeintzuk izango diren zehazten ditu
 			hasieratuGelaxkak();	//Matrizea sortzen du
+			matrizea.setOpaque(false);
 		}
 		return matrizea;
 	}
@@ -106,7 +108,7 @@ public class LaberintoBista extends JFrame implements Observer{
 			//koordenatuakLortu(i);
 			GelaxkaEredu eredu = lEz.get(i);
 			JLabel label = new Gelaxka(eredu);
-			if (lEz.get(i).getTipo()==5) { //LaberintoEredua.getLabEredua().getBomberman().getX()==X && LaberintoEredua.getLabEredua().getBomberman().getY()==Y
+			/*if (lEz.get(i).getTipo()==5) { //LaberintoEredua.getLabEredua().getBomberman().getX()==X && LaberintoEredua.getLabEredua().getBomberman().getY()==Y
 				eredu.setTipo(5);
 			}
 			else if (lEz.get(i).getTipo()==1) {
@@ -116,7 +118,7 @@ public class LaberintoBista extends JFrame implements Observer{
 				if (lEz.get(i).getTipo()==2) {//LaberintoEredua.getLabEredua().ausazZenbakia()>0.4 && !((X==0 && Y==0)||(X==0 && Y==1)||(X==1 && Y==0))
 					eredu.setTipo(2);
 					}
-			}
+			}*/
 			matrizea.add(label);
 		}
 	}	
@@ -131,7 +133,6 @@ public class LaberintoBista extends JFrame implements Observer{
 			Y = posizioa/17;
 		}
 	}*/
-
 
 	private Kontroladore getKontroladore() {
 		if (kontroladore == null) {
@@ -164,21 +165,23 @@ public class LaberintoBista extends JFrame implements Observer{
 	private class Kontroladore implements KeyListener{
 		public void keyPressed(KeyEvent e) {
 			LaberintoEredua lE = LaberintoEredua.getLabEredua();
-			if (e.getKeyCode() == (KeyEvent.VK_RIGHT)) {
-				lE.mugitu(1,0);
-			}
-			if (e.getKeyCode() == KeyEvent.VK_UP) {
-				lE.mugitu(0,-1);
-			}
-			if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-				lE.mugitu(0,1);
-			}
-			if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-				lE.mugitu(-1,0);
-			}
-			if (e.getKeyCode() == KeyEvent.VK_A) {
-				lE.ingurunea();
-			}
+			//if(lE.getBomberman().getBizitza()) {
+				if (e.getKeyCode() == (KeyEvent.VK_RIGHT)) {
+					lE.mugitu(1,0);
+				}
+				if (e.getKeyCode() == KeyEvent.VK_UP) {
+					lE.mugitu(0,-1);
+				}
+				if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+					lE.mugitu(0,1);
+				}
+				if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+					lE.mugitu(-1,0);
+				}
+				if (e.getKeyCode() == KeyEvent.VK_A) {
+					lE.bonbaJarri();
+				}
+			//}
 			
 		}
 
@@ -198,6 +201,8 @@ public class LaberintoBista extends JFrame implements Observer{
 	public void update(Observable o, Object arg) {
 		// TODO Auto-generated method stub
 		LaberintoEredua LE = LaberintoEredua.getLabEredua();
+		sortuLaberintoa();
+		
 		//LaberintoBista.getLabBista();
 		//mugitu(LE);
 		//if (LE.getBorratu()) {
