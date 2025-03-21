@@ -1,4 +1,4 @@
-package proiektua;
+package Pantailak;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -49,6 +49,20 @@ public class BlokeZerrenda {
 			Bloke bloke=iter.next();
 			System.out.println("Mota: "+bloke.getMota()+" Posizioa: ("+bloke.getPosizioa()[0]+ ", "+bloke.getPosizioa()[1]+") Dago"+bloke.badago());
 		}
+	}
+
+	public boolean blokeBigunaDu() {
+		Iterator<Bloke> iter=getIter();
+		boolean dauka = false;
+		while(iter.hasNext() && !dauka) {
+			Bloke pBloke=iter.next();
+			if(!(pBloke.getMota() == null)) {
+				if (pBloke.getMota().equals("Biguna")) {
+					dauka = true;
+				}	
+			}
+		}
+		return dauka;
 	}
 
 }

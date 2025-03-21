@@ -28,9 +28,10 @@ public class Gelaxka extends JLabel implements Observer{
 	        	dimentsionatu();
 	            }
 	        });
+	    eguneratu();
 	}
 	
-	private void actualizar() {
+	private void eguneratu() {
 		switch (gelEredu.getTipo()) {
 			case 1:
 				argazki = (new ImageIcon(getClass().getResource("BlokeGogorra.png")).getImage());
@@ -38,6 +39,12 @@ public class Gelaxka extends JLabel implements Observer{
 			case 2:
 				argazki = (new ImageIcon(getClass().getResource("BlokeBiguna.png")).getImage());
 				break;	
+			case 3:
+				argazki = (new ImageIcon(getClass().getResource("bomb1.png")).getImage());
+				break;
+			case 4:
+				argazki = (new ImageIcon(getClass().getResource("kaBomb2.png")).getImage());
+				break;
 			case 5:
 				argazki = (new ImageIcon(getClass().getResource("Bonberman.png")).getImage());
 				break;
@@ -55,6 +62,9 @@ public class Gelaxka extends JLabel implements Observer{
 				break;
 			case 10:
 				argazki = (new ImageIcon(getClass().getResource("whiteup3.png")).getImage());
+				break;
+			case 12:
+				argazki = (new ImageIcon(getClass().getResource("onFire2.png")).getImage());
 				break;
 			default:
 				argazki = null;
@@ -74,7 +84,7 @@ public class Gelaxka extends JLabel implements Observer{
 	@Override
 	public void update(Observable o, Object arg) {
 		// TODO Auto-generated method stub
-		actualizar();
+		eguneratu();
 	}
 
 }

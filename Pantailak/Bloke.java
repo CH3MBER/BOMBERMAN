@@ -1,4 +1,4 @@
-package proiektua;
+package Pantailak;
 
 public class Bloke {
 	private boolean eztanda; //Blokea eztanda egin al duen ala ez jakiteko
@@ -9,16 +9,18 @@ public class Bloke {
 	
 	
 	public Bloke(String pMota, int pPosX, int pPosY ){
-		this.mota= pMota;
-		this.posX=pPosX;
-		this.posY=pPosY;
-		this.dago=true;
+		this.mota = pMota;
+		this.posX = pPosX;
+		this.posY = pPosY;
+		this.dago = true;
 		
-		if (mota.equalsIgnoreCase("Biguna")) { //Blokea biguna denean, eztanda egin ahal duen ala ez jakiteko
-			this.eztanda=true;
-			
-		}else {
-			this.eztanda=false;
+		if(!(mota == null)) {
+			if (mota.equalsIgnoreCase("Biguna")) { //Blokea biguna denean, eztanda egin ahal duen ala ez jakiteko
+				this.eztanda=true;
+				
+			}else {
+				this.eztanda=false;
+			}
 		}
 	}
 	
@@ -26,6 +28,7 @@ public class Bloke {
 		if(eztanda) {
 			this.dago=false;
 			System.out.println("Blokea eztanda egin du.");
+			this.mota = null;
 			
 		}else {
 			System.out.println("Blokea ez du eztanda egin.");
@@ -47,6 +50,11 @@ public class Bloke {
 	
 	public boolean badago() { //Jakiteko jokuan jarraitzen duen ala ez
 		return dago;
+	}
+
+	public void setMota(String pMota) {
+		this.mota = pMota;
+		
 	}
 
 }

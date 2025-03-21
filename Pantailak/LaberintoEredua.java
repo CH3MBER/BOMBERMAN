@@ -6,8 +6,6 @@ import java.util.Observable;
 import java.util.Queue;
 import java.util.Random;
 
-import javax.swing.JLabel;
-
 @SuppressWarnings("deprecation")
 public class LaberintoEredua extends Observable{
 	
@@ -28,9 +26,8 @@ public class LaberintoEredua extends Observable{
 		this.bZerr = new BlokeZerrenda();
 		matrizeaSortu();
 		this.bonberman = new JokalariEredu(0,0);
-		//bZerr.;
 		setChanged();
-		notifyObservers();
+		notifyObservers(new int[] {1});
 	}
 	
 	public static LaberintoEredua getLabEredua() {
@@ -129,7 +126,6 @@ public class LaberintoEredua extends Observable{
 				}
 				else {
 					getGelaZerr().get((this.bonberman.getY())*17+this.bonberman.getX()).setTipo(5);
-					System.out.print("Mugitu");
 				}
 			}	
 		}
@@ -167,38 +163,49 @@ public class LaberintoEredua extends Observable{
 		
 		if (mugitu) //Gelaxka hutsik dagoela adierazteko balio du, alegia, Bonberman-a mugitu da.
 			getGelaZerr().get((this.bonberman.getAurrekoY())*17+this.bonberman.getAurrekoX()).setTipo(0);
-		
-		setChanged();
-		notifyObservers();
 	}
 	
 	//KENDU HEMENDIK BONBA METODOA
 	public void bonbaJarri() {
-		Bonba bonba = new Bonba(3, this.bonberman.getX(), this.bonberman.getY());
-		proba.add(lehenLibre);
-		System.out.print(proba.peek());
-		getGelaZerr().get(this.bonberman.getY()*17+this.bonberman.getX()).setTipo(3);
-		this.bonberman.setY(this.bonberman.getAurrekoY());
-		this.bonberman.setX(this.bonberman.getAurrekoX());
-		getGelaZerr().get(this.bonberman.getY()*17+this.bonberman.getX()).setTipo(5);
-		lehenLibre++;
+		if (bonberman.bonbaNahiko()) {
+			bonberman.bonbaGutxitu();	
+			Bonba bonba = new Bonba(3, this.bonberman.getX(), this.bonberman.getY());
+			proba.add(lehenLibre);
+			System.out.print(proba.peek());
+			getGelaZerr().get(this.bonberman.getY()*17+this.bonberman.getX()).setTipo(3);
+			this.bonberman.setY(this.bonberman.getAurrekoY());
+			this.bonberman.setX(this.bonberman.getAurrekoX());
+			getGelaZerr().get(this.bonberman.getY()*17+this.bonberman.getX()).setTipo(5);
+			lehenLibre++;
+		}
+		else if (bonberman.denboraPasa()){
+			Bonba bonba = new Bonba(3, this.bonberman.getX(), this.bonberman.getY());
+			proba.add(lehenLibre);
+			System.out.print(proba.peek());
+			getGelaZerr().get(this.bonberman.getY()*17+this.bonberman.getX()).setTipo(3);
+			this.bonberman.setY(this.bonberman.getAurrekoY());
+			this.bonberman.setX(this.bonberman.getAurrekoX());
+			getGelaZerr().get(this.bonberman.getY()*17+this.bonberman.getX()).setTipo(5);
+			lehenLibre++;
+			bonberman.bonbaJarrita();
+			bonberman.timerAktibatu();
+		}
 	}
 	
 	public void apurtuBlokeak(int zut, int lerr) {
-		int pos = lerr*17+zut;	
-		bZerr.blokeakInprimatu();
-		proba.remove();
-		System.out.print(proba.peek());
+		int pos = lerr*17+zut;
+		//bZerr.blokeakInprimatu();
 		if(zut-1>=0 && !(getGelaZerr().get(lerr*17+(zut-1)).getTipo() == 1)) {
 			pos = pos-1;
 			Sua sua = new Sua(zut-1,lerr);
 			if (this.bonberman.getY()*17+this.bonberman.getX() == lerr*17+(zut-1)) {
 				getGelaZerr().get(lerr*17+(zut-1)).setTipo(12);
 				this.bonberman.setBizitza(false);
+				System.exit(0);
 			}
 			else
 				getGelaZerr().get(lerr*17+(zut-1)).setTipo(4);
-			bZerr.getBloke(lerr*17+(zut-1));
+			bZerr.eztandaEginPosizioan(zut-1, lerr);
 			System.out.print("\n"+pos);
 		}
 		if(zut+1<=16 && !(getGelaZerr().get(lerr*17+(zut+1)).getTipo() == 1)) {
@@ -207,10 +214,11 @@ public class LaberintoEredua extends Observable{
 			if (this.bonberman.getY()*17+this.bonberman.getX() == lerr*17+(zut+1)) {
 				getGelaZerr().get(lerr*17+(zut+1)).setTipo(12);
 				this.bonberman.setBizitza(false);
+				System.exit(0);
 			}
 			else
 				getGelaZerr().get(lerr*17+(zut+1)).setTipo(4);
-			bZerr.getBloke(lerr*17+(zut+1));
+			bZerr.eztandaEginPosizioan(zut+1, lerr);
 			System.out.print("\n"+pos);
 		}	
 		if(lerr-1>=0 && !(getGelaZerr().get((lerr-1)*17+zut).getTipo() == 1)) { 
@@ -219,10 +227,11 @@ public class LaberintoEredua extends Observable{
 			if (this.bonberman.getY()*17+this.bonberman.getX() == (lerr-1)*17+zut){
 				getGelaZerr().get((lerr-1)*17+zut).setTipo(12);
 				this.bonberman.setBizitza(false);
+				System.exit(0);
 			}
 			else
 				getGelaZerr().get((lerr-1)*17+zut).setTipo(4);
-			bZerr.getBloke((lerr-1)*17+zut).setMota(null);
+			bZerr.eztandaEginPosizioan(zut, lerr-1);
 			System.out.print("\n"+pos);
 		}
 		if(lerr+1<=10 && !(getGelaZerr().get((lerr+1)*17+zut).getTipo() == 1)) {
@@ -231,11 +240,17 @@ public class LaberintoEredua extends Observable{
 			if (this.bonberman.getY()*17+this.bonberman.getX() == (lerr+1)*17+zut) {
 				getGelaZerr().get((lerr+1)*17+zut).setTipo(12);
 				this.bonberman.setBizitza(false);
+				System.exit(0);
 			}
 			else
 				getGelaZerr().get((lerr+1)*17+zut).setTipo(4);
-			bZerr.getBloke((lerr+1)*17+zut).setMota(null);
+			bZerr.eztandaEginPosizioan(zut, lerr+1);
 			System.out.print("\n"+pos);
+		}
+		
+		if (!(bZerr.blokeBigunaDu())) {
+			System.out.print("\nIrabazi duzu");
+			System.exit(0);
 		}
 	}
 	
