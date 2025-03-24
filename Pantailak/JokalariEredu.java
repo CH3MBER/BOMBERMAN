@@ -13,7 +13,7 @@ public class JokalariEredu {
 	private boolean timerAktibatu = false; 
 	private boolean bonbaPrest = false;
 	private int kont;
-	private int PERIODO = 6;
+	private int PERIODO = 3;
 	private Timer timer = null;
 	
 	public JokalariEredu(int pX, int pY) {
@@ -33,12 +33,10 @@ public class JokalariEredu {
 	}
 
 	public void setX(int i) {
-		// TODO Auto-generated method stub
 		this.X = i;		
 	}
 
 	public void setY(int i) {
-		// TODO Auto-generated method stub
 		this.Y = i;
 	}
 	

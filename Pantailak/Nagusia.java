@@ -10,6 +10,7 @@ public class Nagusia {
 		LaberintoBista lb = new LaberintoBista();
 		
 		//actualizar aqui
+		lE.eguneratu();
 	}
 
 }

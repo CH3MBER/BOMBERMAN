@@ -9,6 +9,7 @@ public class Sua {
 	private int kont;
 	private int PERIODO = 2;
 	private Timer timer = null;
+	private boolean piztuta = false;
 	
 	public Sua(int pX, int pY){
 	this.X = pX;
@@ -28,15 +29,21 @@ public class Sua {
 		kont--;
 		if (kont == 0) {
 			kont = PERIODO;
-			erakutsiSua();
+			ezkonduSua();
 			timer.cancel();
 		}
-		//setChanged();
-		//notifyObservers();	
 	}
 	
-	private void erakutsiSua() {
-		LaberintoEredua.getLabEredua().getGelaZerr().get(Y * 17 + X).setTipo(0);
+	public void ezkonduSua() {
+		LaberintoEredua.getLabEredua().getGelaZerr().get(Y * 17 + X).setMota(0);
 	}
 	
+	public int getX() {
+		return this.X;
+	}
+	
+	public int getY() {
+		return this.Y;
+	}
+
 }

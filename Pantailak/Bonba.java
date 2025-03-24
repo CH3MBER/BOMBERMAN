@@ -9,7 +9,7 @@ public class Bonba {
 	private int Y;
 	private boolean eztanda;
 	private int kont;
-	private int PERIODO = 2;
+	private int PERIODO = 3;
 	private Timer timer = null;
 	
 	public Bonba(int pRadioa, int pX, int pY){
@@ -33,42 +33,17 @@ public class Bonba {
 		if (kont == 0) {
 			kont = PERIODO;
 			eztanda = true;
-			detonar();
+			apurtu();
 			timer.cancel();
 		}
-		//setChanged();
-		//notifyObservers();	
-	}
-	
-	public void eztandaEgin() {
-		if (/*tenp>=3*/true){
-			int eztanda = this.radioa;
-			deleteBonba();
-		}
-		
-	}
-	
-	private void deleteBonba() {
-		
-		
 	}
 	
 	private int getRadioa() {
 		return this.radioa;
 	}
 
-	private void detonar() {
-	    System.out.println("💥 La bomba ha explotado en (" + X + "," + Y + ")!");
-	    
-	    // Cambiar el tipo de la celda donde estaba la bomba a 0 (vacío)
-	    LaberintoEredua.getLabEredua().getGelaZerr().get(Y * 17 + X).setTipo(0);
-	    
-	    // Explosión: Elimina los bloques blandos en la cruz
+	private void apurtu() {
 	    LaberintoEredua.getLabEredua().apurtuBlokeak(X, Y);
-
-	    // Notificar a los observadores (para que la UI cambie la imagen)
-	   // LaberintoEredua.getLabEredua().setChanged();
-	   // LaberintoEredua.getLabEredua().notifyObservers();
 	}
 	
 	public int getX() {

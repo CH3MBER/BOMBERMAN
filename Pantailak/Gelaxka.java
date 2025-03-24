@@ -25,14 +25,13 @@ public class Gelaxka extends JLabel implements Observer{
 	    addComponentListener(new ComponentAdapter() {
 	    	@Override
 	    	public void componentResized(ComponentEvent e) {
-	        	dimentsionatu();
+	        	egokitu();
 	            }
 	        });
-	    eguneratu();
 	}
 	
 	private void eguneratu() {
-		switch (gelEredu.getTipo()) {
+		switch (gelEredu.getMota()) {
 			case 1:
 				argazki = (new ImageIcon(getClass().getResource("BlokeGogorra.png")).getImage());
 				break;
@@ -40,41 +39,53 @@ public class Gelaxka extends JLabel implements Observer{
 				argazki = (new ImageIcon(getClass().getResource("BlokeBiguna.png")).getImage());
 				break;	
 			case 3:
-				argazki = (new ImageIcon(getClass().getResource("bomb1.png")).getImage());
+				argazki = (new ImageIcon(getClass().getResource("Bonba.png")).getImage());
 				break;
 			case 4:
-				argazki = (new ImageIcon(getClass().getResource("kaBomb2.png")).getImage());
+				argazki = (new ImageIcon(getClass().getResource("Eztanda.png")).getImage());
 				break;
 			case 5:
 				argazki = (new ImageIcon(getClass().getResource("Bonberman.png")).getImage());
 				break;
 			case 6:
-				argazki = (new ImageIcon(getClass().getResource("whiteleft1.png")).getImage());
+				argazki = (new ImageIcon(getClass().getResource("Ezker1.png")).getImage());
 				break;
 			case 7:
-				argazki = (new ImageIcon(getClass().getResource("whiteright2.png")).getImage());
+				argazki = (new ImageIcon(getClass().getResource("Ezker2.png")).getImage());
 				break;
 			case 8:
-				argazki = (new ImageIcon(getClass().getResource("whiteup4.png")).getImage());
+				argazki = (new ImageIcon(getClass().getResource("Eskuin1.png")).getImage());
 				break;
 			case 9:
-				argazki = (new ImageIcon(getClass().getResource("whitedown1.png")).getImage());
+				argazki = (new ImageIcon(getClass().getResource("Eskuin2.png")).getImage());
 				break;
 			case 10:
-				argazki = (new ImageIcon(getClass().getResource("whiteup3.png")).getImage());
+				argazki = (new ImageIcon(getClass().getResource("Behera1.png")).getImage());
+				break;
+			case 11:
+				argazki = (new ImageIcon(getClass().getResource("Behera2.png")).getImage());
 				break;
 			case 12:
-				argazki = (new ImageIcon(getClass().getResource("onFire2.png")).getImage());
+				argazki = (new ImageIcon(getClass().getResource("Gora1.png")).getImage());
+				break;
+			case 13:
+				argazki = (new ImageIcon(getClass().getResource("Gora2.png")).getImage());
+				break;
+			case 14:
+				argazki = (new ImageIcon(getClass().getResource("JokSutan.png")).getImage());
+				break;
+			case 15:
+				argazki = (new ImageIcon(getClass().getResource("BonbaEskuan.png")).getImage());
 				break;
 			default:
 				argazki = null;
 				setIcon(null);
 				break;
 			}
-			dimentsionatu();
+			egokitu();
 	}
 	
-	private void dimentsionatu() {
+	private void egokitu() {
 		if (!(argazki == null) && !((getWidth() <= 0 || getHeight() <= 0))) {
 			Image imagenEscalada = argazki.getScaledInstance(getWidth(), getHeight(), Image.SCALE_DEFAULT);
 			setIcon(new ImageIcon(imagenEscalada));

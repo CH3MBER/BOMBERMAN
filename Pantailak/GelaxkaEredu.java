@@ -11,13 +11,19 @@ public class GelaxkaEredu extends Observable{
         this.mota = pMota;
     }
 
-    public int getTipo() {
+    public int getMota() {
         return mota;
     }
 
-    public void setTipo(int nuevoTipo) {
-        this.mota = nuevoTipo;
+    public void setMota(int motaBerria) {
+        this.mota = motaBerria;
         setChanged();
         notifyObservers();
     }
+    
+    public void eguneratu()
+    {
+		setChanged();
+		notifyObservers();
+	}
 }

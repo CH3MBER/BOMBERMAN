@@ -28,6 +28,19 @@ public class BlokeZerrenda {
 		return null;
 	}
 	
+	public Bloke getBloke(int X, int Y) {
+		Iterator<Bloke> iter=getIter();
+		Bloke pBloke = null;
+		boolean aurkitua = false;
+		while(iter.hasNext() && !aurkitua) {
+			pBloke=iter.next();
+			if (pBloke.getPosizioa()[0]== X && pBloke.getPosizioa()[1]== Y && pBloke != null) {
+				aurkitua = true;
+			}
+		}
+		return pBloke;
+	}
+	
 	public ArrayList<Bloke> getBlokeGuztiak(){
 		return new ArrayList<>(blokeZerrenda);
 	}
@@ -36,9 +49,11 @@ public class BlokeZerrenda {
 		Iterator<Bloke> iter=getIter();
 		while(iter.hasNext()) {
 			Bloke pBloke=iter.next();
-			if (pBloke.getPosizioa()[0]== x&& pBloke.getPosizioa()[1]== y) {
-				pBloke.eztandaEgin();
-				break;
+			if (pBloke != null) {
+				if (pBloke.getPosizioa()[0] == x && pBloke.getPosizioa()[1] == y && (pBloke instanceof Biguna)) {
+					((Biguna)pBloke).eztandaEgin();
+					break;
+				}
 			}
 		}
 	}
@@ -47,7 +62,7 @@ public class BlokeZerrenda {
 		Iterator<Bloke> iter=getIter();
 		while(iter.hasNext()) {
 			Bloke bloke=iter.next();
-			System.out.println("Mota: "+bloke.getMota()+" Posizioa: ("+bloke.getPosizioa()[0]+ ", "+bloke.getPosizioa()[1]+") Dago"+bloke.badago());
+			System.out.println("Posizioa: ("+bloke.getPosizioa()[0]+ ", "+bloke.getPosizioa()[1]+") Dago"+bloke.badago());
 		}
 	}
 
@@ -56,10 +71,8 @@ public class BlokeZerrenda {
 		boolean dauka = false;
 		while(iter.hasNext() && !dauka) {
 			Bloke pBloke=iter.next();
-			if(!(pBloke.getMota() == null)) {
-				if (pBloke.getMota().equals("Biguna")) {
-					dauka = true;
-				}	
+			if (pBloke instanceof Biguna) {
+				dauka = true;	
 			}
 		}
 		return dauka;

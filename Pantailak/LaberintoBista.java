@@ -20,7 +20,6 @@ import java.awt.BorderLayout;
 public class LaberintoBista extends JFrame implements Observer{
 
 	private static final long serialVersionUID = 1L;
-	private static LaberintoBista nLB = null;
 	private JPanel contentPane;
 	private JPanel matrizea;
 	private Kontroladore kontroladore = null;
@@ -46,7 +45,6 @@ public class LaberintoBista extends JFrame implements Observer{
 	 */
 	public LaberintoBista() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		inizializatu();
 		LaberintoEredua.getLabEredua().addObserver(this);
 	}
 	
@@ -70,14 +68,7 @@ public class LaberintoBista extends JFrame implements Observer{
 		setResizable(false);
 		setFocusable(true);
 	}
-	
-	public static LaberintoBista getLabBista() {
-		if(nLB == null) {
-			nLB = new LaberintoBista();
-		}
-		return nLB;
-	}
-	
+		
 	private JPanel sortuLaberintoa() {								//Matrizea hartzen du
 		if(matrizea==null) {
 			matrizea = new JPanel();
@@ -93,20 +84,10 @@ public class LaberintoBista extends JFrame implements Observer{
 		for (int i=0; i<lEz.size();i++) {
 			GelaxkaEredu eredu = lEz.get(i);
 			JLabel label = new Gelaxka(eredu);
+			eredu.eguneratu();
 			matrizea.add(label);
 		}
-	}	
-		
-	/*private void koordenatuakLortu(int posizioa) {
-		if (posizioa<17) {
-			X = posizioa;
-			Y = 0;
-		}
-		else {
-			X = posizioa%17;
-			Y = posizioa/17;
-		}
-	}*/
+	}
 
 	private Kontroladore getKontroladore() {
 		if (kontroladore == null) {
@@ -153,8 +134,7 @@ public class LaberintoBista extends JFrame implements Observer{
 		LaberintoEredua LE = LaberintoEredua.getLabEredua();
 		if (arg instanceof int[]) {
 			if(((int[])arg)[0]==1) {
-				sortuLaberintoa();
-				System.out.print("Sortu");
+				inizializatu();
 			}
 		}
 	}
