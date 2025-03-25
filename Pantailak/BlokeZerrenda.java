@@ -1,7 +1,7 @@
-package Pantailak;
+package bomberman;
+
 import java.util.ArrayList;
 import java.util.Iterator;
-
 
 public class BlokeZerrenda {
 	private ArrayList<Bloke> blokeZerrenda;
@@ -76,6 +76,11 @@ public class BlokeZerrenda {
 			}
 		}
 		return dauka;
+	}
+	
+	public void sortuBlokea (int pMota,int pX, int pY) {
+		Bloke blokeBerria = BlokeFactory.getNireBlokeFactory().sortuBlokea(pMota, pX, pY);
+		gehituBloke(blokeBerria);
 	}
 
 }
