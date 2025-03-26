@@ -1,4 +1,4 @@
-package Pantailak;
+package Sprites;
 
 import java.awt.Image;
 import java.awt.event.ComponentAdapter;
@@ -8,6 +8,7 @@ import java.util.Observer;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import Pantailak.GelaxkaEredu;
 
 @SuppressWarnings("deprecation")
 public class Gelaxka extends JLabel implements Observer{
@@ -30,8 +31,8 @@ public class Gelaxka extends JLabel implements Observer{
 	        });
 	}
 	
-	private void eguneratu() {
-		switch (gelEredu.getMota()) {
+	private void eguneratu(int arg) {
+		switch (arg) {
 			case 1:
 				argazki = (new ImageIcon(getClass().getResource("BlokeGogorra.png")).getImage());
 				break;
@@ -95,7 +96,9 @@ public class Gelaxka extends JLabel implements Observer{
 	@Override
 	public void update(Observable o, Object arg) {
 		// TODO Auto-generated method stub
-		eguneratu();
+		if (arg instanceof int[]) {
+				eguneratu(((int[])arg)[0]);
+		}
 	}
 
 }

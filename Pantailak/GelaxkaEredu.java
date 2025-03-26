@@ -18,12 +18,12 @@ public class GelaxkaEredu extends Observable{
     public void setMota(int motaBerria) {
         this.mota = motaBerria;
         setChanged();
-        notifyObservers();
+        notifyObservers(new int[] {motaBerria});
     }
     
-    public void eguneratu()
+    public void eguneratu(int i)
     {
 		setChanged();
-		notifyObservers();
+		notifyObservers(new int[] {i});
 	}
 }

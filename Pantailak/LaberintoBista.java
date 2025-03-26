@@ -1,4 +1,4 @@
-package Pantailak;
+package Sprites;
 
 import java.awt.Graphics;
 
@@ -15,8 +15,10 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 import java.awt.BorderLayout;
+import Pantailak.LaberintoEredua;
+import Pantailak.GelaxkaEredu;
 
-@SuppressWarnings("deprecation")
+@SuppressWarnings({ "deprecation"})
 public class LaberintoBista extends JFrame implements Observer{
 
 	private static final long serialVersionUID = 1L;
@@ -84,7 +86,7 @@ public class LaberintoBista extends JFrame implements Observer{
 		for (int i=0; i<lEz.size();i++) {
 			GelaxkaEredu eredu = lEz.get(i);
 			JLabel label = new Gelaxka(eredu);
-			eredu.eguneratu();
+			eredu.eguneratu(eredu.getMota());
 			matrizea.add(label);
 		}
 	}
