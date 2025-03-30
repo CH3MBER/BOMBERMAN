@@ -1,15 +1,16 @@
 package Pantailak;
 
-public class Bloke {
+abstract class Bloke {
 	private int posX; //X koordenatuak matrizean jakiteko
 	private int posY; // Y koordenatuak matrizean jakiteko 
 	private boolean dago; //Blokea jokuan jarraitzen duen ala eztanda egin duela jakiteko
+	private EztandaStrategy eztandaStrategy;
 	
-	
-	public Bloke(int pPosX, int pPosY ){
+	protected Bloke(int pPosX, int pPosY, EztandaStrategy pEztStrat){
 		this.posX = pPosX;
 		this.posY = pPosY;
 		this.setDago(true);
+		this.eztandaStrategy = pEztStrat;
 	}
 		
 	public int[] getPosizioa() { //Jakiteko zein posizioan dagoen
@@ -28,4 +29,12 @@ public class Bloke {
 		this.dago = dago;
 	}
 
+	public void motaAldatu(EztandaStrategy pEztStrat) {
+		eztandaStrategy = pEztStrat;
+	}
+	
+	public EztandaStrategy getMota() {
+		return this.eztandaStrategy;
+	}
+	
 }

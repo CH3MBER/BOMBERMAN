@@ -1,7 +1,7 @@
-package bomberman;
-
+package Pantailak;
 import java.util.ArrayList;
 import java.util.Iterator;
+
 
 public class BlokeZerrenda {
 	private ArrayList<Bloke> blokeZerrenda;
@@ -17,8 +17,8 @@ public class BlokeZerrenda {
 		blokeZerrenda.add(pBloke);
 	}
 	
-	public void deleteBloke(Bloke pBloke) {
-		blokeZerrenda.remove(pBloke);
+	public void deleteBloke(int x, int y) {
+		blokeZerrenda.remove(getBloke(x,y));
 	}
 	
 	public Bloke getBloke(int index) {
@@ -34,10 +34,12 @@ public class BlokeZerrenda {
 		boolean aurkitua = false;
 		while(iter.hasNext() && !aurkitua) {
 			pBloke=iter.next();
-			if (pBloke.getPosizioa()[0]== X && pBloke.getPosizioa()[1]== Y && pBloke != null) {
+			if (pBloke.getPosizioa()[0]== X && pBloke.getPosizioa()[1]== Y) {
 				aurkitua = true;
 			}
 		}
+		if(!aurkitua)
+			pBloke = null;
 		return pBloke;
 	}
 	
@@ -49,11 +51,11 @@ public class BlokeZerrenda {
 		Iterator<Bloke> iter=getIter();
 		while(iter.hasNext()) {
 			Bloke pBloke=iter.next();
-			if (pBloke != null) {
-				if (pBloke.getPosizioa()[0] == x && pBloke.getPosizioa()[1] == y && (pBloke instanceof Biguna)) {
-					((Biguna)pBloke).eztandaEgin();
-					break;
-				}
+			if (pBloke.getPosizioa()[0] == x && pBloke.getPosizioa()[1] == y && (pBloke instanceof Biguna)) {
+//				((Biguna)pBloke).eztandaEgin();
+//				deleteBloke(pBloke.getPosizioa()[0], pBloke.getPosizioa()[1]);
+				pBloke.motaAldatu(new EztandaHutsa());
+				break;
 			}
 		}
 	}
@@ -72,15 +74,16 @@ public class BlokeZerrenda {
 		while(iter.hasNext() && !dauka) {
 			Bloke pBloke=iter.next();
 			if (pBloke instanceof Biguna) {
+				System.out.print("Dago");
 				dauka = true;	
 			}
 		}
 		return dauka;
 	}
-	
-	public void sortuBlokea (int pMota,int pX, int pY) {
+
+	public void sortuBlokea (int pMota, int pX, int pY) {
 		Bloke blokeBerria = BlokeFactory.getNireBlokeFactory().sortuBlokea(pMota, pX, pY);
 		gehituBloke(blokeBerria);
 	}
-
+	
 }

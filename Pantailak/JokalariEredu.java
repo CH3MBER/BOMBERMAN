@@ -61,6 +61,10 @@ public class JokalariEredu {
 	public void setBizitza(boolean b) {
 		bizitza = b;
 	}
+	
+	public boolean getBizitza() {
+		return this.bizitza;
+	}
 
 	public boolean bonbaNahiko() {
 		return bonbaKop!=0;

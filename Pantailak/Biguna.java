@@ -5,7 +5,7 @@ public class Biguna extends Bloke{
 	private boolean eztanda = true;
 	
 	public Biguna(int pPosX, int pPosY) {
-		super(pPosX, pPosY);
+		super(pPosX, pPosY, new EztandaNormal());
 		// TODO Auto-generated constructor stub
 	}
 	public void eztandaEgin() { //Blokea eztanda egiteko
@@ -13,4 +13,5 @@ public class Biguna extends Bloke{
 		setDago(false);
 		
 	}
+
 }

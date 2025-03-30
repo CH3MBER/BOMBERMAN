@@ -6,24 +6,25 @@ import java.util.Observable;
 import java.util.Queue;
 import java.util.Random;
 
-@SuppressWarnings("deprecation")
 public class LaberintoEredua extends Observable{
 	
 	////////////ATRIBUTUAK////////////
 	private static LaberintoEredua nLE = null;
-	private ArrayList<GelaxkaEredu> gelaxkaZerrenda = null;//Gelaxkak bilduko dituen kolekzioa
-	private BlokeZerrenda bZerr;
+	private ArrayList<GelaxkaEredu> gelaxkaZerrenda = null;	//Gelaxkak bilduko dituen kolekzioa
+	private BlokeZerrenda blokeZerr;
 	private final int zutabe = 17;
 	private final int errenkada = 11;
 	private JokalariEredu bonberman;
 	private boolean borratu = false;
 	private Queue<Bonba> bonbaLista = new LinkedList<>();
 	private Queue<Sua> suLista = new LinkedList<>();
+	private ArrayList<Etsai> etsaiLista = new ArrayList<>();
+	private int mota = 1;
 	
 	
 	////////////ERAIKITZAILEA////////////
 	private LaberintoEredua() {
-		this.bZerr = new BlokeZerrenda();
+		this.blokeZerr = new BlokeZerrenda();
 		matrizeaSortu();
 		this.bonberman = new JokalariEredu(0,0);
 	}
@@ -36,6 +37,7 @@ public class LaberintoEredua extends Observable{
 	}
 	
 	////////////EGUNERAKETA HASIERAN////////////
+	@SuppressWarnings("deprecation")
 	public void eguneratu() {
 		// TODO Auto-generated method stub
 		setChanged();
@@ -48,27 +50,79 @@ public class LaberintoEredua extends Observable{
 		int lerro, zut;
 		for(lerro=0;lerro<errenkada;lerro++) {
 			for(zut=0;zut<zutabe;zut++) {
-				GelaxkaEredu gel = null;
-				int i = zut%17;
-				if (i%2!=0 && lerro%2!=0) {
-					bZerr.gehituBloke(new Gogorra(zut, lerro));
-					gel = new GelaxkaEredu(1);
-					getGelaZerr().add(gel); //Bloke Gogorra
-				}
-				else if (ausazZenbakia()>0.4 && !((lerro==0 && zut==0)||(lerro==0 && zut==1)||(lerro==1 && zut==0))){
-					bZerr.gehituBloke(new Biguna(zut, lerro));
-					gel = new GelaxkaEredu(2);
-					getGelaZerr().add(gel);	//Bloke Biguna
-				}
-				else if (lerro==0 && zut==0) {
-					gel = new GelaxkaEredu(5);
-					getGelaZerr().add(gel);	//Bonberman
-					bZerr.gehituBloke(null);
-				}
-				else {
-					gel = new GelaxkaEredu(0);
-					getGelaZerr().add(gel);	//Hutsik
-					bZerr.gehituBloke(null);
+				switch (mota) {
+				case 1:
+					if (zut%2!=0 && lerro%2!=0) {
+						blokeZerr.sortuBlokea(1, zut, lerro);
+						getGelaZerr().add(new GelaxkaEredu(1)); //Bloke Gogorra
+					}
+					else if (!((lerro==0 && zut==0)||(lerro==0 && zut==1)||(lerro==1 && zut==0))){
+						if (ausazZenbakia()>0.4) {
+							blokeZerr.sortuBlokea(2, zut, lerro);
+							getGelaZerr().add(new GelaxkaEredu(2));	//Bloke Biguna
+						}
+						else if (ausazZenbakia()>0.9 && etsaiLista.size()<6) {
+							getGelaZerr().add(new GelaxkaEredu(20));	//Etsaia
+							etsaiLista.add(new Etsai(zut, lerro));
+						}
+						else {
+							getGelaZerr().add(new GelaxkaEredu(0));	//Hutsik
+							blokeZerr.sortuBlokea(0, zut, lerro);
+						}
+					}
+					else if (lerro==0 && zut==0) {
+						getGelaZerr().add(new GelaxkaEredu(5));	//Bonberman
+						blokeZerr.sortuBlokea(0, zut, lerro);
+					}
+					else {
+						getGelaZerr().add(new GelaxkaEredu(0));	//Hutsik
+						blokeZerr.sortuBlokea(0, zut, lerro);
+					}
+					break;
+			case 2:
+					if (!((lerro==0 && zut==0)||(lerro==0 && zut==1)||(lerro==1 && zut==0))){
+						if (ausazZenbakia()>0.4) {
+							blokeZerr.sortuBlokea(2, zut, lerro);
+							getGelaZerr().add(new GelaxkaEredu(2));	//Bloke Biguna
+						}
+						else if (ausazZenbakia()>0.9 && etsaiLista.size()<8) {
+							getGelaZerr().add(new GelaxkaEredu(20));	//Bloke Biguna
+							etsaiLista.add(new Etsai(zut, lerro));
+						}
+						else {
+							getGelaZerr().add(new GelaxkaEredu(0));	//Hutsik
+							blokeZerr.sortuBlokea(0, zut, lerro);
+						}
+					}
+					else if (lerro==0 && zut==0) {
+						getGelaZerr().add(new GelaxkaEredu(5));	//Bonberman
+						blokeZerr.sortuBlokea(0, zut, lerro);
+					}
+					else {
+						getGelaZerr().add(new GelaxkaEredu(0));	//Hutsik
+						blokeZerr.sortuBlokea(0, zut, lerro);
+					}
+					break;
+			case 3:
+					if (!((lerro==0 && zut==0)||(lerro==0 && zut==1)||(lerro==1 && zut==0))){
+						if (ausazZenbakia()>0.95 && etsaiLista.size()<10) {
+							getGelaZerr().add(new GelaxkaEredu(20));
+							etsaiLista.add(new Etsai(zut, lerro));
+						}
+						else {
+							getGelaZerr().add(new GelaxkaEredu(0));	//Hutsik
+							blokeZerr.sortuBlokea(0, zut, lerro);
+						}
+					}
+					else if (lerro==0 && zut==0) {
+						getGelaZerr().add(new GelaxkaEredu(5));	//Bonberman
+						blokeZerr.sortuBlokea(0, zut, lerro);
+					}
+					else {
+						getGelaZerr().add(new GelaxkaEredu(0));	//Hutsik
+						blokeZerr.sortuBlokea(0, zut, lerro);
+					}
+					break;
 				}
 			}
 		}
@@ -83,7 +137,7 @@ public class LaberintoEredua extends Observable{
 	}
 	
 	public BlokeZerrenda getbZerr() {
-		return bZerr;
+		return blokeZerr;
 	}
 
 	public JokalariEredu getBomberman() {
@@ -120,29 +174,32 @@ public class LaberintoEredua extends Observable{
 		boolean erre = false;
 		boolean bonba = false;
 		if (!((this.bonberman.getX()+i<0) || (this.bonberman.getY()+j<0) || (this.bonberman.getX()+i>16) || (this.bonberman.getY()+j>10))){	//Bonberman-a tarteetan dagoela konprobatzen du
-			if(!((getGelaZerr().get((this.bonberman.getY()+j)*17+this.bonberman.getX()+i).getMota() == 1) || (getGelaZerr().get((this.bonberman.getY()+j)*17+this.bonberman.getX()+i).getMota() == 2) || (getGelaZerr().get((this.bonberman.getY()+j)*17+this.bonberman.getX()+i).getMota() == 3) || (getGelaZerr().get((this.bonberman.getY())*17+this.bonberman.getX()).getMota() == 14))){	//Bonberman-a blokeekin ez dela joko konprobatzen du
-				this.bonberman.setAurrekoX(this.bonberman.getX());	//Lehengo, aurreko posizioak eguneratzen ditu eta gero helduko den posizioa
-				this.bonberman.setAurrekoY(this.bonberman.getY());
-				if (getGelaZerr().get((this.bonberman.getY()+j)*17+this.bonberman.getX()+i).getMota() == 4) {
-					for(Sua su : suLista) {
-						if (su.getX() == (this.bonberman.getX()+i) && su.getY() == (this.bonberman.getY()+j)) {
-							su.ezkonduSua();
+			if((blokeZerr.getBloke((this.bonberman.getX()+i),(this.bonberman.getY()+j)).getMota() instanceof EztandaHutsa) /*|| (blokeZerr.getBloke((this.bonberman.getX()+i),(this.bonberman.getY()+j)) == null)*/) {
+				if(!((bonbarikDago(i, j)) || !(this.bonberman.getBizitza()))){	//Bonberman-a blokeekin ez dela joko konprobatzen du
+					this.bonberman.setAurrekoX(this.bonberman.getX());	//Lehengo, aurreko posizioak eguneratzen ditu eta gero helduko den posizioa
+					this.bonberman.setAurrekoY(this.bonberman.getY());
+					if (getGelaZerr().get((this.bonberman.getY()+j)*17+this.bonberman.getX()+i).getMota() == 4) {
+						for(Sua su : suLista) {
+							if (su.getX() == (this.bonberman.getX()+i) && su.getY() == (this.bonberman.getY()+j)) {
+								su.ezkonduSua();
+							}
 						}
+						getGelaZerr().get((this.bonberman.getY()+j)*17+this.bonberman.getX()+i).setMota(14);
+						erre = true;
+						this.bonberman.setBizitza(false);
 					}
-					getGelaZerr().get((this.bonberman.getY()+j)*17+this.bonberman.getX()+i).setMota(14);
-					erre = true;
-				}
-				if (getGelaZerr().get((this.bonberman.getAurrekoY())*17+this.bonberman.getAurrekoX()).getMota() == 15) {
-					getGelaZerr().get((this.bonberman.getAurrekoY())*17+this.bonberman.getAurrekoX()).setMota(3);
-					bonba = true;
-				}
-				this.bonberman.setX(this.bonberman.getX()+i);
-				this.bonberman.setY(this.bonberman.getY()+j);
-				mugitu = true;
-			}	
+					if (getGelaZerr().get((this.bonberman.getAurrekoY())*17+this.bonberman.getAurrekoX()).getMota() == 15) {
+						getGelaZerr().get((this.bonberman.getAurrekoY())*17+this.bonberman.getAurrekoX()).setMota(3);
+						bonba = true;
+					}
+					this.bonberman.setX(this.bonberman.getX()+i);
+					this.bonberman.setY(this.bonberman.getY()+j);
+					mugitu = true;
+				}	
+			}
 		}
 		
-		if(!erre && !(getGelaZerr().get((this.bonberman.getY())*17+this.bonberman.getX()).getMota() == 15) && !(getGelaZerr().get((this.bonberman.getY())*17+this.bonberman.getX()).getMota() == 14)) {
+		if(!erre && !(getGelaZerr().get((this.bonberman.getY())*17+this.bonberman.getX()).getMota() == 15) && (this.bonberman.getBizitza())) {
 			switch (i){	//Mugimenduaren arabera "sprite" bat edo beste bat erakutsiko du
 			case -1:
 				if(getGelaZerr().get((this.bonberman.getAurrekoY())*17+this.bonberman.getAurrekoX()).getMota() == 6 || getGelaZerr().get((this.bonberman.getY())*17+this.bonberman.getX()).getMota() == 6){
@@ -192,6 +249,15 @@ public class LaberintoEredua extends Observable{
 		}
 	}
 
+	private boolean bonbarikDago(int i, int j) {
+		for (Bonba bon : bonbaLista) {
+			if (bon.getX() == (this.bonberman.getX()+i) && bon.getY() == (this.bonberman.getY()+j)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public void bonbaJarri() {
 		Bonba bonba;
 		if (bonberman.bonbaNahiko()) {
@@ -231,7 +297,7 @@ public class LaberintoEredua extends Observable{
 			}
 			else if (!(getGelaZerr().get(lerr*17+(zut-1)).getMota() == 3))
 				getGelaZerr().get(lerr*17+(zut-1)).setMota(4);
-			bZerr.eztandaEginPosizioan(zut-1, lerr);
+			blokeZerr.eztandaEginPosizioan(zut-1, lerr);
 		}
 		if(zut+1<=16 && !(getGelaZerr().get(lerr*17+(zut+1)).getMota() == 1)) {
 			suLista.add(new Sua(zut+1,lerr));
@@ -242,7 +308,7 @@ public class LaberintoEredua extends Observable{
 			}
 			else if (!(getGelaZerr().get(lerr*17+(zut+1)).getMota() == 3))
 				getGelaZerr().get(lerr*17+(zut+1)).setMota(4);
-			bZerr.eztandaEginPosizioan(zut+1, lerr);
+			blokeZerr.eztandaEginPosizioan(zut+1, lerr);
 		}	
 		if(lerr-1>=0 && !(getGelaZerr().get((lerr-1)*17+zut).getMota() == 1)) { 
 			suLista.add(new Sua(zut,lerr-1));
@@ -253,7 +319,7 @@ public class LaberintoEredua extends Observable{
 			}
 			else if (!(getGelaZerr().get((lerr-1)*17+zut).getMota() == 3))
 				getGelaZerr().get((lerr-1)*17+zut).setMota(4);
-			bZerr.eztandaEginPosizioan(zut, lerr-1);
+			blokeZerr.eztandaEginPosizioan(zut, lerr-1);
 		}
 		if(lerr+1<=10 && !(getGelaZerr().get((lerr+1)*17+zut).getMota() == 1)) {
 			suLista.add(new Sua(zut,lerr+1));
@@ -264,16 +330,17 @@ public class LaberintoEredua extends Observable{
 			}
 			else if (!(getGelaZerr().get((lerr+1)*17+zut).getMota() == 3))
 				getGelaZerr().get((lerr+1)*17+zut).setMota(4);
-			bZerr.eztandaEginPosizioan(zut, lerr+1);
+			blokeZerr.eztandaEginPosizioan(zut, lerr+1);
 		}
 		
-		if (!(bZerr.blokeBigunaDu())) {
+		if (etsaiLista.isEmpty()) {
 			System.out.print("\nZorionak Bonberman jokoan irabazi duzu.");
 			partidaBukatu();
 		}
 		
 		if (hil) {
 			System.out.print("\nPartida galdu duzu.");
+			this.bonberman.setBizitza(false);
 			partidaBukatu();
 	
 		}
@@ -289,4 +356,69 @@ public class LaberintoEredua extends Observable{
 		} 
 		catch (Exception e) {} 
 		}
+
+	public void etsaiMugitu(Etsai etsai, int x, int y) { //Poner boolean en etsaiak
+		// TODO Auto-generated method stub
+		System.out.print("\nMugitu behar naiz");
+		int ausaz = (int)(Math.random()*(4-1+1)*1);
+		switch (ausaz) {
+		case 0:
+			if (!(y-1<0)){	//Bonberman-a tarteetan dagoela konprobatzen du		
+				if(((blokeZerr.getBloke(x,y-1)) instanceof Hutsa) || (blokeZerr.getBloke(x,y-1)) == null) {
+					if(!((etsaiBonba(x, y-1)) || !(this.bonberman.getBizitza()))){
+						System.out.print("gora");
+						gelaxkaZerrenda.get(y*17+x).setMota(0);
+						gelaxkaZerrenda.get((y-1)*17+x).setMota(20);
+						etsai.setY(y-1);
+					}
+				}
+			}
+			break;
+		case 1:
+			if (!(x-1<0)){	//Bonberman-a tarteetan dagoela konprobatzen du			
+				if(((blokeZerr.getBloke(x-1,y)) instanceof Hutsa) || (blokeZerr.getBloke(x-1,y)) == null) {
+					if(!((etsaiBonba(x-1, y)) || !(this.bonberman.getBizitza()))){
+						System.out.print("ezk");
+						gelaxkaZerrenda.get(y*17+x).setMota(0);
+						gelaxkaZerrenda.get(y*17+x-1).setMota(20);
+						etsai.setX(x-1);
+					}
+				}
+			}
+			break;
+		case 2:
+			if (!(x+1<16)){	//Bonberman-a tarteetan dagoela konprobatzen du	
+				if(((blokeZerr.getBloke(x+1,y)) instanceof Hutsa) || (blokeZerr.getBloke(x+1,y)) == null) {
+					if(!((etsaiBonba(x+1, y)) || !(this.bonberman.getBizitza()))){
+						System.out.print("esk");
+						gelaxkaZerrenda.get(y*17+x).setMota(0);
+						gelaxkaZerrenda.get(y*17+x+1).setMota(20);
+						etsai.setX(x+1);
+					}
+				}
+			}
+			break;
+		case 3:
+			if (!(y+1<10)){
+				if(((blokeZerr.getBloke(x,y+1)) instanceof Hutsa) || (blokeZerr.getBloke(y+1)) == null) {
+					if(!((etsaiBonba(x, y+1)) || !(this.bonberman.getBizitza()))){
+						System.out.print("behe");
+						gelaxkaZerrenda.get((y)*17+x).setMota(0);
+						gelaxkaZerrenda.get((y+1)*17+x).setMota(20);
+						etsai.setY(y+1);
+					}
+				}
+			}
+			break;
+		}
+	}
+
+	private boolean etsaiBonba(int x, int y) {
+		for (Bonba bon : bonbaLista) {
+			if (bon.getX() == x && bon.getY() == y) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

@@ -78,6 +78,9 @@ public class Gelaxka extends JLabel implements Observer{
 			case 15:
 				argazki = (new ImageIcon(getClass().getResource("BonbaEskuan.png")).getImage());
 				break;
+			case 20:
+				argazki = (new ImageIcon(getClass().getResource("Etsai1.png")).getImage());
+				break;
 			default:
 				argazki = null;
 				setIcon(null);
