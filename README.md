@@ -11,3 +11,5 @@ Zuzenketak:
 -Klaseen izenak aldatu argiago egoteko (GelaxkaEredu / Gelaxka kasuan bezala)
    
 ## Apirilak 14 Sprint entrega
+
+pal laberinto un factory
