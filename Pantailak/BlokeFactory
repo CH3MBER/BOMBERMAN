@@ -13,13 +13,17 @@ public class BlokeFactory {
 		}
 		return nireBlokeFactory;
 	}
-	public Bloke sortuBlokea(int pMota,int pX, int pY) {
+	
+	public Bloke sortuBlokea(int pMota, int pX, int pY) {
 		Bloke nireBloke = null;
 		if (pMota == 1) {
 			nireBloke = new Gogorra(pX,pY);
 		}
-		else {
+		else if (pMota == 2){
 			nireBloke = new Biguna(pX, pY);
+		}
+		else {
+			nireBloke = new Hutsa(pX, pY);
 		}
 		return nireBloke;
 	}
