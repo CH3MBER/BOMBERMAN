@@ -1,4 +1,4 @@
-package Pantailak;
+package proiektua;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -18,7 +18,7 @@ public class LaberintoEredua extends Observable{
 	private boolean borratu = false;
 	private Queue<Bonba> bonbaLista = new LinkedList<>();
 	private Queue<Sua> suLista = new LinkedList<>();
-	private ArrayList<Etsai> etsaiLista = new ArrayList<>();
+	private EtsaiZerrenda etsaiLista;
 	private int mota = 1;
 	
 	
@@ -61,9 +61,9 @@ public class LaberintoEredua extends Observable{
 							blokeZerr.sortuBlokea(2, zut, lerro);
 							getGelaZerr().add(new GelaxkaEredu(2));	//Bloke Biguna
 						}
-						else if (ausazZenbakia()>0.9 && etsaiLista.size()<6) {
+						else if (ausazZenbakia()>0.9 && etsaiLista.etsaiTamaina()<6) {
 							getGelaZerr().add(new GelaxkaEredu(20));	//Etsaia
-							etsaiLista.add(new Etsai(zut, lerro));
+							etsaiLista.gehituEtsaia(new Etsai(zut, lerro));
 						}
 						else {
 							getGelaZerr().add(new GelaxkaEredu(0));	//Hutsik
@@ -85,9 +85,9 @@ public class LaberintoEredua extends Observable{
 							blokeZerr.sortuBlokea(2, zut, lerro);
 							getGelaZerr().add(new GelaxkaEredu(2));	//Bloke Biguna
 						}
-						else if (ausazZenbakia()>0.9 && etsaiLista.size()<8) {
+						else if (ausazZenbakia()>0.9 && etsaiLista.etsaiTamaina()<8) {
 							getGelaZerr().add(new GelaxkaEredu(20));	//Bloke Biguna
-							etsaiLista.add(new Etsai(zut, lerro));
+							etsaiLista.gehituEtsaia(new Etsai(zut, lerro));
 						}
 						else {
 							getGelaZerr().add(new GelaxkaEredu(0));	//Hutsik
@@ -105,9 +105,9 @@ public class LaberintoEredua extends Observable{
 					break;
 			case 3:
 					if (!((lerro==0 && zut==0)||(lerro==0 && zut==1)||(lerro==1 && zut==0))){
-						if (ausazZenbakia()>0.95 && etsaiLista.size()<10) {
+						if (ausazZenbakia()>0.95 && etsaiLista.etsaiTamaina()<10) {
 							getGelaZerr().add(new GelaxkaEredu(20));
-							etsaiLista.add(new Etsai(zut, lerro));
+							etsaiLista.gehituEtsaia(new Etsai(zut, lerro));
 						}
 						else {
 							getGelaZerr().add(new GelaxkaEredu(0));	//Hutsik
@@ -333,7 +333,7 @@ public class LaberintoEredua extends Observable{
 			blokeZerr.eztandaEginPosizioan(zut, lerr+1);
 		}
 		
-		if (etsaiLista.isEmpty()) {
+		if (etsaiLista.erakutsiEtsaiGuztiak().isEmpty()) {
 			System.out.print("\nZorionak Bonberman jokoan irabazi duzu.");
 			partidaBukatu();
 		}
