@@ -4,6 +4,7 @@ package bomberman;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+
 public class EtsaiZerrenda {
 	private ArrayList<Etsai> etsaiZerrenda;
 	
@@ -49,5 +50,16 @@ public class EtsaiZerrenda {
 		return this.etsaiZerrenda.size();
 	}
 	
+	public boolean zerrendaHutsik() {
+		boolean hutsik = false;
+		if (this.etsaiZerrenda.size()==0) {
+			hutsik = true;
+		}
+		return hutsik;
+	}
+
+
+}
+
 
 }
