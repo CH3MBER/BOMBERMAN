@@ -1,4 +1,4 @@
-package bomberman;
+package Pantailak;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -18,7 +18,7 @@ public class LaberintoEredua extends Observable{
 	private boolean borratu = false;
 	private Queue<Bonba> bonbaLista = new LinkedList<>();
 	private Queue<Sua> suLista = new LinkedList<>();
-	private EtsaiZerrenda etsaiLista = new EtsaiZerrenda();
+	private ArrayList<Etsai> etsaiLista = new ArrayList<>();
 	private int mota = 1;
 	
 	
@@ -42,11 +42,13 @@ public class LaberintoEredua extends Observable{
 		// TODO Auto-generated method stub
 		setChanged();
 		notifyObservers(new int[] {1});
+		for (GelaxkaEredu gelaxka : gelaxkaZerrenda)
+			gelaxka.eguneratu();
 	}
 	
 	
 	////////////MATRIZEA ERAIKI////////////
-	private void matrizeaSortu() { //Hurrengo aukerak: 0 Gelaxka Hutsa, 1 Bloke Gogorra, 2 Bloke Biguna, 5 Bonberman-a,
+	private void matrizeaSortu() { //Hurrengo aukerak: 0 Gelaxka Hutsa, 1 Bloke Gogorra, 2 Bloke Biguna 5 Bonberman-a
 		int lerro, zut;
 		for(lerro=0;lerro<errenkada;lerro++) {
 			for(zut=0;zut<zutabe;zut++) {
@@ -61,22 +63,22 @@ public class LaberintoEredua extends Observable{
 							blokeZerr.sortuBlokea(2, zut, lerro);
 							getGelaZerr().add(new GelaxkaEredu(2));	//Bloke Biguna
 						}
-						else if (ausazZenbakia()>0.9 && etsaiLista.zerrendaTamaina()<6) {
+						else if (ausazZenbakia()>0.9 && etsaiLista.size()<6) {
 							getGelaZerr().add(new GelaxkaEredu(20));	//Etsaia
-							etsaiLista.gehituEtsaia(new Etsai(zut, lerro));
+							etsaiLista.add(new Etsai(zut, lerro));
 						}
 						else {
 							getGelaZerr().add(new GelaxkaEredu(0));	//Hutsik
-							blokeZerr.sortuBlokea(0, zut, lerro);
+							//blokeZerr.sortuBlokea(0, zut, lerro);
 						}
 					}
 					else if (lerro==0 && zut==0) {
 						getGelaZerr().add(new GelaxkaEredu(5));	//Bonberman
-						blokeZerr.sortuBlokea(0, zut, lerro);
+						//blokeZerr.sortuBlokea(0, zut, lerro);
 					}
 					else {
 						getGelaZerr().add(new GelaxkaEredu(0));	//Hutsik
-						blokeZerr.sortuBlokea(0, zut, lerro);
+						//blokeZerr.sortuBlokea(0, zut, lerro);
 					}
 					break;
 			case 2:
@@ -85,9 +87,9 @@ public class LaberintoEredua extends Observable{
 							blokeZerr.sortuBlokea(2, zut, lerro);
 							getGelaZerr().add(new GelaxkaEredu(2));	//Bloke Biguna
 						}
-						else if (ausazZenbakia()>0.9 && etsaiLista.zerrendaTamaina()<8) {
+						else if (ausazZenbakia()>0.9 && etsaiLista.size()<8) {
 							getGelaZerr().add(new GelaxkaEredu(20));	//Bloke Biguna
-							etsaiLista.gehituEtsaia(new Etsai(zut, lerro));
+							etsaiLista.add(new Etsai(zut, lerro));
 						}
 						else {
 							getGelaZerr().add(new GelaxkaEredu(0));	//Hutsik
@@ -105,9 +107,9 @@ public class LaberintoEredua extends Observable{
 					break;
 			case 3:
 					if (!((lerro==0 && zut==0)||(lerro==0 && zut==1)||(lerro==1 && zut==0))){
-						if (ausazZenbakia()>0.95 && etsaiLista.zerrendaTamaina()<10) {
+						if (ausazZenbakia()>0.95 && etsaiLista.size()<10) {
 							getGelaZerr().add(new GelaxkaEredu(20));
-							etsaiLista.gehituEtsaia(new Etsai(zut, lerro));
+							etsaiLista.add(new Etsai(zut, lerro));
 						}
 						else {
 							getGelaZerr().add(new GelaxkaEredu(0));	//Hutsik
@@ -174,7 +176,7 @@ public class LaberintoEredua extends Observable{
 		boolean erre = false;
 		boolean bonba = false;
 		if (!((this.bonberman.getX()+i<0) || (this.bonberman.getY()+j<0) || (this.bonberman.getX()+i>16) || (this.bonberman.getY()+j>10))){	//Bonberman-a tarteetan dagoela konprobatzen du
-			if((blokeZerr.getBloke((this.bonberman.getX()+i),(this.bonberman.getY()+j)).getMota() instanceof EztandaHutsa) /*|| (blokeZerr.getBloke((this.bonberman.getX()+i),(this.bonberman.getY()+j)) == null)*/) {
+			if((!((blokeZerr.getBloke((this.bonberman.getX()+i),(this.bonberman.getY()+j)) instanceof Biguna) || (blokeZerr.getBloke((this.bonberman.getX()+i),(this.bonberman.getY()+j)) instanceof Gogorra))) || (blokeZerr.getBloke((this.bonberman.getX()+i),(this.bonberman.getY()+j)) == null)) {
 				if(!((bonbarikDago(i, j)) || !(this.bonberman.getBizitza()))){	//Bonberman-a blokeekin ez dela joko konprobatzen du
 					this.bonberman.setAurrekoX(this.bonberman.getX());	//Lehengo, aurreko posizioak eguneratzen ditu eta gero helduko den posizioa
 					this.bonberman.setAurrekoY(this.bonberman.getY());
@@ -188,6 +190,15 @@ public class LaberintoEredua extends Observable{
 						erre = true;
 						this.bonberman.setBizitza(false);
 					}
+					
+					for (Etsai es : etsaiLista) {
+						if(es.getX()==this.bonberman.getX()+i && es.getY()==this.bonberman.getY()+j) {
+							getGelaZerr().get((this.bonberman.getY()+j)*17+this.bonberman.getX()+i).setMota(14);
+							erre = true;
+							this.bonberman.setBizitza(false);
+						}
+					}
+					
 					if (getGelaZerr().get((this.bonberman.getAurrekoY())*17+this.bonberman.getAurrekoX()).getMota() == 15) {
 						getGelaZerr().get((this.bonberman.getAurrekoY())*17+this.bonberman.getAurrekoX()).setMota(3);
 						bonba = true;
@@ -333,7 +344,7 @@ public class LaberintoEredua extends Observable{
 			blokeZerr.eztandaEginPosizioan(zut, lerr+1);
 		}
 		
-		if (etsaiLista.zerrendaHutsik()) {
+		if (etsaiLista.isEmpty()) {
 			System.out.print("\nZorionak Bonberman jokoan irabazi duzu.");
 			partidaBukatu();
 		}
@@ -359,57 +370,63 @@ public class LaberintoEredua extends Observable{
 
 	public void etsaiMugitu(Etsai etsai, int x, int y) { //Poner boolean en etsaiak
 		// TODO Auto-generated method stub
-		System.out.print("\nMugitu behar naiz");
-		int ausaz = (int)(Math.random()*(4-1+1)*1);
-		switch (ausaz) {
-		case 0:
-			if (!(y-1<0)){	//Bonberman-a tarteetan dagoela konprobatzen du		
-				if(((blokeZerr.getBloke(x,y-1)) instanceof Hutsa) || (blokeZerr.getBloke(x,y-1)) == null) {
-					if(!((etsaiBonba(x, y-1)) || !(this.bonberman.getBizitza()))){
-						System.out.print("gora");
-						gelaxkaZerrenda.get(y*17+x).setMota(0);
-						gelaxkaZerrenda.get((y-1)*17+x).setMota(20);
-						etsai.setY(y-1);
+		Random rand = new Random();
+		boolean mugitu = false;
+		while (!mugitu) {
+			int ausaz = rand.nextInt(4);
+			switch (ausaz) {
+			case 0:
+				if (!(y-1<0)){	//Bonberman-a tarteetan dagoela konprobatzen du		
+					if(!(((blokeZerr.getBloke(x,y-1)) instanceof Gogorra) || ((blokeZerr.getBloke(x,y-1)) instanceof Biguna)) || (blokeZerr.getBloke(x,y-1)) == null) {
+						if(!((etsaiBonba(x, y-1)) || !(this.bonberman.getBizitza()))){
+							gelaxkaZerrenda.get(y*17+x).setMota(0);
+							gelaxkaZerrenda.get((y-1)*17+x).setMota(20);
+							etsai.setY(y-1);
+							mugitu = true;
+						}
 					}
 				}
-			}
-			break;
-		case 1:
-			if (!(x-1<0)){	//Bonberman-a tarteetan dagoela konprobatzen du			
-				if(((blokeZerr.getBloke(x-1,y)) instanceof Hutsa) || (blokeZerr.getBloke(x-1,y)) == null) {
-					if(!((etsaiBonba(x-1, y)) || !(this.bonberman.getBizitza()))){
-						System.out.print("ezk");
-						gelaxkaZerrenda.get(y*17+x).setMota(0);
-						gelaxkaZerrenda.get(y*17+x-1).setMota(20);
-						etsai.setX(x-1);
+				break;
+			case 1:
+				if (!(x-1<0)){	//Bonberman-a tarteetan dagoela konprobatzen du			
+					if(!(((blokeZerr.getBloke(x-1,y)) instanceof Gogorra) || ((blokeZerr.getBloke(x-1,y)) instanceof Biguna)) || (blokeZerr.getBloke(x-1,y)) == null) {
+						if(!((etsaiBonba(x-1, y)) || !(this.bonberman.getBizitza()))){
+							gelaxkaZerrenda.get(y*17+x).setMota(0);
+							gelaxkaZerrenda.get(y*17+x-1).setMota(20);
+							etsai.setX(x-1);
+							mugitu = true;
+						}
 					}
 				}
-			}
-			break;
-		case 2:
-			if (!(x+1<16)){	//Bonberman-a tarteetan dagoela konprobatzen du	
-				if(((blokeZerr.getBloke(x+1,y)) instanceof Hutsa) || (blokeZerr.getBloke(x+1,y)) == null) {
-					if(!((etsaiBonba(x+1, y)) || !(this.bonberman.getBizitza()))){
-						System.out.print("esk");
-						gelaxkaZerrenda.get(y*17+x).setMota(0);
-						gelaxkaZerrenda.get(y*17+x+1).setMota(20);
-						etsai.setX(x+1);
+				break;
+			case 2:
+				if (x+1<=16){	//Bonberman-a tarteetan dagoela konprobatzen du	
+					if(!(((blokeZerr.getBloke(x+1,y)) instanceof Gogorra) || ((blokeZerr.getBloke(x+1,y)) instanceof Biguna)) || (blokeZerr.getBloke(x+1,y)) == null) {
+						if(!((etsaiBonba(x+1, y)) || !(this.bonberman.getBizitza()))){
+							gelaxkaZerrenda.get(y*17+x).setMota(0);
+							gelaxkaZerrenda.get(y*17+x+1).setMota(20);
+							etsai.setX(x+1);
+							mugitu = true;
+						}
 					}
 				}
-			}
-			break;
-		case 3:
-			if (y+1<10){
-				if(((blokeZerr.getBloke(x,y+1)) instanceof Hutsa) || (blokeZerr.getBloke(x,y+1)) == null) {
-					if(!((etsaiBonba(x, y+1)) || !(this.bonberman.getBizitza()))){
-						System.out.print("behe");
-						gelaxkaZerrenda.get((y)*17+x).setMota(0);
-						gelaxkaZerrenda.get((y+1)*17+x).setMota(20);
-						etsai.setY(y+1);
+				break;
+			case 3:
+				if (y+1<=10){
+					if(!(((blokeZerr.getBloke(x,y+1)) instanceof Gogorra) || ((blokeZerr.getBloke(x,y+1)) instanceof Biguna)) || (blokeZerr.getBloke(y+1)) == null) {
+						if(!((etsaiBonba(x, y+1)) || !(this.bonberman.getBizitza()))){
+							gelaxkaZerrenda.get((y)*17+x).setMota(0);
+							gelaxkaZerrenda.get((y+1)*17+x).setMota(20);
+							etsai.setY(y+1);
+							mugitu = true;
+						}
 					}
 				}
+				break;
 			}
-			break;
+			if (this.bonberman.getX() == etsai.getX() && this.bonberman.getY() == etsai.getY()) {
+				partidaBukatu();
+			}
 		}
 	}
 
@@ -421,4 +438,40 @@ public class LaberintoEredua extends Observable{
 		}
 		return false;
 	}
+	
+	public void apurtuBlokeak2(int zut, int lerr) {
+		bonbaLista.remove();
+		if (!((blokeZerr.getBloke(zut+1, lerr)) instanceof Gogorra)) {
+			for (int i=zut; i<zutabe; i++) {
+				suLista.add(new Sua(i,lerr));
+				gelaxkaZerrenda.get(lerr*17+i).setMota(4);
+				blokeZerr.eztandaEginPosizioan(i, lerr);
+			}
+		}
+		if (!((blokeZerr.getBloke(zut-1, lerr)) instanceof Gogorra)) {
+			for (int i=0; i<=zut; i++) {
+				suLista.add(new Sua(i,lerr));
+				gelaxkaZerrenda.get(lerr*17+i).setMota(4);
+				blokeZerr.eztandaEginPosizioan(i, lerr);
+			}
+		}
+
+		if (!((blokeZerr.getBloke(zut, lerr-1)) instanceof Gogorra)) {
+			for (int i=0; i<=lerr; i++) {
+				suLista.add(new Sua(zut,i));
+				gelaxkaZerrenda.get(i*17+zut).setMota(4);
+				blokeZerr.eztandaEginPosizioan(zut, i);
+			}
+		}
+		
+		if (!((blokeZerr.getBloke(zut, lerr+1)) instanceof Gogorra)) {
+			for (int i=lerr; i<errenkada; i++) {
+				suLista.add(new Sua(zut,i));
+				gelaxkaZerrenda.get(i*17+zut).setMota(4);
+				blokeZerr.eztandaEginPosizioan(zut, i);
+			}
+		}
+		
+	}
+	
 }
