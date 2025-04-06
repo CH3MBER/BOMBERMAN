@@ -1,4 +1,4 @@
-package proiektua;
+package bomberman;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -18,7 +18,7 @@ public class LaberintoEredua extends Observable{
 	private boolean borratu = false;
 	private Queue<Bonba> bonbaLista = new LinkedList<>();
 	private Queue<Sua> suLista = new LinkedList<>();
-	private EtsaiZerrenda etsaiLista;
+	private EtsaiZerrenda etsaiLista = new EtsaiZerrenda();
 	private int mota = 1;
 	
 	
@@ -46,7 +46,7 @@ public class LaberintoEredua extends Observable{
 	
 	
 	////////////MATRIZEA ERAIKI////////////
-	private void matrizeaSortu() { //Hurrengo aukerak: 0 Gelaxka Hutsa, 1 Bloke Gogorra, 2 Bloke Biguna 5 Bonberman-a
+	private void matrizeaSortu() { //Hurrengo aukerak: 0 Gelaxka Hutsa, 1 Bloke Gogorra, 2 Bloke Biguna, 5 Bonberman-a,
 		int lerro, zut;
 		for(lerro=0;lerro<errenkada;lerro++) {
 			for(zut=0;zut<zutabe;zut++) {
@@ -61,7 +61,7 @@ public class LaberintoEredua extends Observable{
 							blokeZerr.sortuBlokea(2, zut, lerro);
 							getGelaZerr().add(new GelaxkaEredu(2));	//Bloke Biguna
 						}
-						else if (ausazZenbakia()>0.9 && etsaiLista.etsaiTamaina()<6) {
+						else if (ausazZenbakia()>0.9 && etsaiLista.zerrendaTamaina()<6) {
 							getGelaZerr().add(new GelaxkaEredu(20));	//Etsaia
 							etsaiLista.gehituEtsaia(new Etsai(zut, lerro));
 						}
@@ -85,7 +85,7 @@ public class LaberintoEredua extends Observable{
 							blokeZerr.sortuBlokea(2, zut, lerro);
 							getGelaZerr().add(new GelaxkaEredu(2));	//Bloke Biguna
 						}
-						else if (ausazZenbakia()>0.9 && etsaiLista.etsaiTamaina()<8) {
+						else if (ausazZenbakia()>0.9 && etsaiLista.zerrendaTamaina()<8) {
 							getGelaZerr().add(new GelaxkaEredu(20));	//Bloke Biguna
 							etsaiLista.gehituEtsaia(new Etsai(zut, lerro));
 						}
@@ -105,7 +105,7 @@ public class LaberintoEredua extends Observable{
 					break;
 			case 3:
 					if (!((lerro==0 && zut==0)||(lerro==0 && zut==1)||(lerro==1 && zut==0))){
-						if (ausazZenbakia()>0.95 && etsaiLista.etsaiTamaina()<10) {
+						if (ausazZenbakia()>0.95 && etsaiLista.zerrendaTamaina()<10) {
 							getGelaZerr().add(new GelaxkaEredu(20));
 							etsaiLista.gehituEtsaia(new Etsai(zut, lerro));
 						}
@@ -333,7 +333,7 @@ public class LaberintoEredua extends Observable{
 			blokeZerr.eztandaEginPosizioan(zut, lerr+1);
 		}
 		
-		if (etsaiLista.erakutsiEtsaiGuztiak().isEmpty()) {
+		if (etsaiLista.zerrendaHutsik()) {
 			System.out.print("\nZorionak Bonberman jokoan irabazi duzu.");
 			partidaBukatu();
 		}
@@ -399,8 +399,8 @@ public class LaberintoEredua extends Observable{
 			}
 			break;
 		case 3:
-			if (!(y+1<10)){
-				if(((blokeZerr.getBloke(x,y+1)) instanceof Hutsa) || (blokeZerr.getBloke(y+1)) == null) {
+			if (y+1<10){
+				if(((blokeZerr.getBloke(x,y+1)) instanceof Hutsa) || (blokeZerr.getBloke(x,y+1)) == null) {
 					if(!((etsaiBonba(x, y+1)) || !(this.bonberman.getBizitza()))){
 						System.out.print("behe");
 						gelaxkaZerrenda.get((y)*17+x).setMota(0);
