@@ -1,22 +1,23 @@
-package Pantailak;
+package bomberman;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class JokalariEredu {
-	private int X;
-	private int Y;
-	private int aurreX;
-	private int aurreY;
-	private boolean bizitza;
+public abstract class JokalariEredu {
+	protected int X;
+	protected int Y;
+	protected int aurreX;
+	protected int aurreY;
+	protected boolean bizitza;
 	private int bonbaKop = 10;
 	private boolean timerAktibatu = false; 
 	private boolean bonbaPrest = false;
 	private int kont;
 	private int PERIODO = 3;
 	private Timer timer = null;
+	private BombaStrategy bombaMota;
 	
-	public JokalariEredu(int pX, int pY) {
+	protected JokalariEredu(int pX, int pY) {
 		this.X = pX;
 		this.Y = pY;
 		this.aurreX = pX;
@@ -60,6 +61,10 @@ public class JokalariEredu {
 
 	public void setBizitza(boolean b) {
 		bizitza = b;
+	}
+	
+	public void setBonbaKop(int kop) {
+		bonbaKop = kop;
 	}
 	
 	public boolean getBizitza() {
@@ -108,4 +113,18 @@ public class JokalariEredu {
 		bonbaPrest = false;
 		timerAktibatu = false;
 	}	
+	
+	public void bombaJarri() {
+		if(bombaMota != null && bonbaNahiko()) {
+			bombaMota.setX(X);
+			bombaMota.setY(Y);
+			bombaMota.timerHasi();
+			bonbaGutxitu();
+			bonbaJarrita();
+		}
+	}
+	
+	public void aldatuBombaMota(BombaStrategy b) {
+		bombaMota = b;
+	}
 }
