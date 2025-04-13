@@ -35,7 +35,8 @@ public class Sua {
 	}
 	
 	public void ezkonduSua() {
-		LaberintoEredua.getLabEredua().getGelaZerr().get(Y * 17 + X).setMota(0);
+		LaberintoEredua.getLabEredua().getLabMota().getGelaZerr().aurkituGelaxka(Y * 17 + X).setMota(0);
+		LaberintoEredua.getLabEredua().amatatuSua(this);
 	}
 	
 	public int getX() {

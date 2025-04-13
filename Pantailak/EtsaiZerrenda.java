@@ -14,17 +14,16 @@ public class EtsaiZerrenda {
 	
 	private Iterator<Etsai> getIterator(){
 		return this.etsaiZerrenda.iterator();
-		
 	}
 	
 	public void gehituEtsaia(Etsai pEtsai) {
 		this.etsaiZerrenda.add(pEtsai);
 	}
-	
-	
+
 	public void ezabatuEtsai (Etsai pEtsai) {
 		this.etsaiZerrenda.remove(pEtsai);
 	}
+	
 	public void ezabatuEtsaiKoord (int x, int y) {
 		this.etsaiZerrenda.remove(aurkituEtsai(x,y));
 	}

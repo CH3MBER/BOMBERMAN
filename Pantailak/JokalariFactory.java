@@ -1,4 +1,4 @@
-package bomberman;
+package Pantailak;
 
 public class JokalariFactory {
 	private static JokalariFactory nireJokalariFactory;
@@ -8,7 +8,7 @@ public class JokalariFactory {
 		
 	}
 	
-	public JokalariFactory getNireJokalariFactory() {
+	public static JokalariFactory getNireJokalariFactory() {
 		if (nireJokalariFactory == null) {
 			nireJokalariFactory = new JokalariFactory();
 		}

@@ -5,7 +5,7 @@ import java.util.Random;
 
 public abstract class Laberinto {
 
-	protected ArrayList<GelaxkaEredu> gelaxkaZerrenda = new ArrayList<>();	//Gelaxkak bilduko dituen kolekzioa
+	protected GelaxkaZerrenda gelaxkaZerrenda = new GelaxkaZerrenda();	//Gelaxkak bilduko dituen kolekzioa
 	protected BlokeZerrenda blokeZerr = new BlokeZerrenda();
 	protected final int zutabe = 17;
 	protected final int errenkada = 11;
@@ -24,7 +24,7 @@ public abstract class Laberinto {
 
 	protected abstract void matrizeaSortu();
 	
-	public ArrayList<GelaxkaEredu> getGelaZerr(){
+	public GelaxkaZerrenda getGelaZerr(){
 		return this.gelaxkaZerrenda;
 	}
 	
