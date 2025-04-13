@@ -27,22 +27,6 @@ public class LaberintoBista extends JFrame implements Observer{
 	private Kontroladore kontroladore = null;
 
 	/**
-	 * Launch the application.
-	 */
-	/*public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					LaberintoBista frame = new LaberintoBista();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}*/
-
-	/**
 	 * Create the frame.
 	 */
 	public LaberintoBista() {
@@ -82,11 +66,10 @@ public class LaberintoBista extends JFrame implements Observer{
 	}
 
 	private void hasieratuGelaxkak() {
-		ArrayList<GelaxkaEredu> lEz = LaberintoEredua.getLabEredua().getGelaZerr();
+		LaberintoEredua.getLabEredua();
+		ArrayList<GelaxkaEredu> lEz = LaberintoEredua.getLabEredua().getLabMota().getGelaZerr();
 		for (int i=0; i<lEz.size();i++) {
-			GelaxkaEredu eredu = lEz.get(i);
-			JLabel label = new Gelaxka(eredu);
-			eredu.eguneratu(eredu.getMota());
+			Gelaxka label = new Gelaxka(lEz.get(i));
 			matrizea.add(label);
 		}
 	}
@@ -100,24 +83,23 @@ public class LaberintoBista extends JFrame implements Observer{
 	
 	private class Kontroladore implements KeyListener{
 		public void keyPressed(KeyEvent e) {
-			LaberintoEredua lE = LaberintoEredua.getLabEredua();
 				if (e.getKeyCode() == (KeyEvent.VK_RIGHT)) {
-					lE.mugitu(1,0);
+					LaberintoEredua.getLabEredua().mugitu(1,0);
 				}
 				if (e.getKeyCode() == KeyEvent.VK_UP) {
-					lE.mugitu(0,-1);
+					LaberintoEredua.getLabEredua().mugitu(0,-1);
 				}
 				if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-					lE.mugitu(0,1);
+					LaberintoEredua.getLabEredua().mugitu(0,1);
 				}
 				if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-					lE.mugitu(-1,0);
+					LaberintoEredua.getLabEredua().mugitu(-1,0);
 				}
 				if (e.getKeyCode() == KeyEvent.VK_A) {
-					lE.bonbaJarri();
+					LaberintoEredua.getLabEredua().bonbaJarri();
 				}
 		}
-
+		
 		@Override
 		public void keyTyped(KeyEvent e) {
 			// TODO Auto-generated method stub
@@ -133,7 +115,6 @@ public class LaberintoBista extends JFrame implements Observer{
 	@Override
 	public void update(Observable o, Object arg) {
 		// TODO Auto-generated method stub
-		LaberintoEredua LE = LaberintoEredua.getLabEredua();
 		if (arg instanceof int[]) {
 			if(((int[])arg)[0]==1) {
 				inizializatu();

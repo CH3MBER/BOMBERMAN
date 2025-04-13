@@ -1,4 +1,4 @@
-package bomberman;
+package Pantailak;
 
 
 import java.util.ArrayList;
@@ -19,10 +19,13 @@ public class EtsaiZerrenda {
 	
 	public void gehituEtsaia(Etsai pEtsai) {
 		this.etsaiZerrenda.add(pEtsai);
-		
 	}
 	
-	public void ezabatuEtsai (int x, int y) {
+	
+	public void ezabatuEtsai (Etsai pEtsai) {
+		this.etsaiZerrenda.remove(pEtsai);
+	}
+	public void ezabatuEtsaiKoord (int x, int y) {
 		this.etsaiZerrenda.remove(aurkituEtsai(x,y));
 	}
 	
@@ -57,9 +60,5 @@ public class EtsaiZerrenda {
 		}
 		return hutsik;
 	}
-
-
-}
-
 
 }

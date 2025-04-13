@@ -1,5 +1,7 @@
-package bomberman;
+package Pantailak;
 
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -16,12 +18,14 @@ public abstract class JokalariEredu {
 	private int PERIODO = 3;
 	private Timer timer = null;
 	private BombaStrategy bombaMota;
+	private Queue<BombaStrategy> bonLista = new LinkedList<>();
 	
-	protected JokalariEredu(int pX, int pY) {
+	protected JokalariEredu(int pX, int pY, BombaStrategy pBombaStrategy) {
 		this.X = pX;
 		this.Y = pY;
 		this.aurreX = pX;
 		this.aurreY = pY;
+		this.bombaMota = pBombaStrategy;
 		this.bizitza = true;
 	}
 	
@@ -114,17 +118,68 @@ public abstract class JokalariEredu {
 		timerAktibatu = false;
 	}	
 	
-	public void bombaJarri() {
+	public boolean bombaJarri() {
+		boolean jarrita = false;
+		BombaStrategy bomba;
 		if(bombaMota != null && bonbaNahiko()) {
-			bombaMota.setX(X);
-			bombaMota.setY(Y);
-			bombaMota.timerHasi();
+			if (bombaMota instanceof BombaNormala) {
+				bomba = new BombaNormala();
+			}
+			else {
+				bomba = new BombaUltra();
+				
+			}
+			bomba.setX(X);
+			bomba.setY(Y);
+			bomba.timerHasi();
+			bonLista.add(bomba);
 			bonbaGutxitu();
-			bonbaJarrita();
+			jarrita = true;
 		}
+		else if (bombaMota != null && bonbaPrest) {
+			if (bombaMota instanceof BombaNormala) {
+				bomba = new BombaNormala();
+			}
+			else {
+				bomba = new BombaUltra();
+				
+			}
+			bomba.setX(X);
+			bomba.setY(Y);
+			bomba.timerHasi();
+			bonLista.add(bomba);
+			bonbaJarrita();
+			timerAktibatu();
+			jarrita = true;
+		}
+		return jarrita;
+		
 	}
 	
 	public void aldatuBombaMota(BombaStrategy b) {
 		bombaMota = b;
+	}
+
+	public boolean bombarikDago(int i, int j) {
+		for (BombaStrategy bon : bonLista) {
+			if (bon.getX() == (getX()+i) && bon.getY() == (getY()+j)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean bombarikEtsai(int x, int y) {
+		for (BombaStrategy bon : bonLista) {
+			if (bon.getX() == x && bon.getY() == y) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public void bonbaKendu() {
+		bonLista.remove();
+		
 	}
 }

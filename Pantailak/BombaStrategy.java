@@ -1,4 +1,4 @@
-package bomberman;
+package Pantailak;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -12,22 +12,10 @@ public abstract class BombaStrategy {
 	protected int PERIODO = 3;
 	protected Timer timer = null;
 	
-	/*protected BonbaStrategy(/*int pRadioa, int pX, int pY){
-		//this.radioa = pRadioa;
-		this.X = pX;
-		this.Y = pY;
-		eztanda = true;
-		kont = PERIODO;
-		TimerTask timerTask = new TimerTask() {
-			@Override
-			public void run() {
-				updateKont();
-			}		
-		};
-		timer = new Timer();
-		timer.scheduleAtFixedRate(timerTask, 0, 1000);
-	} */
+	protected BombaStrategy(){}
+	
 	public void timerHasi() {
+		kont = PERIODO;
 		TimerTask timerTask = new TimerTask() {
 			@Override
 			public void run() {
@@ -38,8 +26,6 @@ public abstract class BombaStrategy {
 		timer.scheduleAtFixedRate(timerTask, 0, 1000);
 	}
 		
-
-	
 	public int getX() {
 		return this.X;
 	}
@@ -49,7 +35,7 @@ public abstract class BombaStrategy {
 	}
 	
 	public void setX(int pX) {
-		X =pX;
+		X = pX;
 	}
 	
 	public void setY(int pY) {
