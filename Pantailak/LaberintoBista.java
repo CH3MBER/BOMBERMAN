@@ -66,8 +66,7 @@ public class LaberintoBista extends JFrame implements Observer{
 	}
 
 	private void hasieratuGelaxkak() {
-		LaberintoEredua.getLabEredua();
-		ArrayList<GelaxkaEredu> lEz = LaberintoEredua.getLabEredua().getLabMota().getGelaZerr();
+		ArrayList<GelaxkaEredu> lEz = LaberintoEredua.getLabEredua().getLabMota().getGelaZerr().erakutsiGelaxkaGuztiak();
 		for (int i=0; i<lEz.size();i++) {
 			Gelaxka label = new Gelaxka(lEz.get(i));
 			matrizea.add(label);

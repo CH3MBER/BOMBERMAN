@@ -13,16 +13,11 @@ import Pantailak.GelaxkaEredu;
 @SuppressWarnings("deprecation")
 public class Gelaxka extends JLabel implements Observer{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
-	private GelaxkaEredu gelEredu;
 	private Image argazki; 
 	
 	public Gelaxka(GelaxkaEredu pGelEredu) {
-		this.gelEredu = pGelEredu;
-		this.gelEredu.addObserver(this);
+		pGelEredu.addObserver(this);
 	    addComponentListener(new ComponentAdapter() {
 	    	@Override
 	    	public void componentResized(ComponentEvent e) {
@@ -80,6 +75,42 @@ public class Gelaxka extends JLabel implements Observer{
 				break;
 			case 20:
 				argazki = (new ImageIcon(getClass().getResource("Etsai1.png")).getImage());
+				break;
+			case 30:
+				argazki = (new ImageIcon(getClass().getResource("BonbermanBeltza.png")).getImage());
+				break;
+			case 31:
+				argazki = (new ImageIcon(getClass().getResource("BeltzaEzker1.png")).getImage());
+				break;
+			case 32:
+				argazki = (new ImageIcon(getClass().getResource("BeltzaEzker2.png")).getImage());
+				break;
+			case 33:
+				argazki = (new ImageIcon(getClass().getResource("BeltzaEskuin1.png")).getImage());
+				break;
+			case 34:
+				argazki = (new ImageIcon(getClass().getResource("BeltzaEskuin2.png")).getImage());
+				break;
+			case 35:
+				argazki = (new ImageIcon(getClass().getResource("BeltzaBehera1.png")).getImage());
+				break;
+			case 36:
+				argazki = (new ImageIcon(getClass().getResource("BeltzaBehera2.png")).getImage());
+				break;
+			case 37:
+				argazki = (new ImageIcon(getClass().getResource("BeltzaGora1.png")).getImage());
+				break;
+			case 38:
+				argazki = (new ImageIcon(getClass().getResource("BeltzaGora2.png")).getImage());
+				break;
+			case 39:
+				argazki = (new ImageIcon(getClass().getResource("BeltzaBonba.png")).getImage());
+				break;
+			case 40:
+				argazki = (new ImageIcon(getClass().getResource("JokBelSu.png")).getImage());
+				break;
+			case 45:
+				argazki = (new ImageIcon(getClass().getResource("BonbaUltra.png")).getImage());
 				break;
 			default:
 				argazki = null;
