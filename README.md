@@ -1,8 +1,7 @@
 # Bomberman
-## (Patroiak aplikatu)
-1. Hasiera panela
-2. Soft eta Empty moduak aplikatu
-3. Black bomberman + Etsaiak (Random mugimenduak izan)
+## (JAVA8+Gehiketak)
+1. JAVA8 (DERRIGORREZ!)
+2. Nahi ditugun aldaerak, Bomebrman berriak, explosio berriak...
 
 Zuzenketak:
 
