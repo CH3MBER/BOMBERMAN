@@ -8,10 +8,13 @@ public class Nagusia {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
+		//EREDUA//
 		HasieraPantailaEredu hpE = HasieraPantailaEredu.getHPE();
 		
+		//BISTA//
 		HasieraPantailaBista hp = new HasieraPantailaBista();
 		
+		//Eguneraketa
 		hpE.eguneratu();
 		
 		//LaberintoEredua lE = LaberintoEredua.getLabEredua();
@@ -22,7 +25,7 @@ public class Nagusia {
 		//BISTA//
 		//LaberintoBista lb = new LaberintoBista();
 		
-		//actualizar aqui
+		//Eguneratu
 		//lE.eguneratu();
 	}
 

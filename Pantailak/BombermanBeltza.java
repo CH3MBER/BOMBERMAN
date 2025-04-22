@@ -1,6 +1,6 @@
 package Pantailak;
 
-public class BombermanBeltza extends JokalariEredu {
+public class BombermanBeltza extends Bomberman {
 
 	private int bonbaKop = 1;
 	
