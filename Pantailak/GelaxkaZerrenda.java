@@ -19,12 +19,8 @@ public class GelaxkaZerrenda {
 		this.gelaxkaZerr.add(pGelaxka);
 	}
 
-	public void ezabatuEtsai(GelaxkaEredu pGelaxka) {
+	public void ezabatuGelaxka(GelaxkaEredu pGelaxka) {
 		this.gelaxkaZerr.remove(pGelaxka);
-	}
-	
-	public void ezabatuEtsaiKoord(int x, int y) {
-		this.gelaxkaZerr.remove(aurkituGelaxka(y*17+x));
 	}
 	
 	public GelaxkaEredu aurkituGelaxka(int gelaxka) {

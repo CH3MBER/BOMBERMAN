@@ -12,24 +12,27 @@ public abstract class Bomberman {
 	protected int Y;
 	protected int aurreX;
 	protected int aurreY;
-	protected boolean bizitza;
+	protected boolean bizirik;
+	private int bizitzak = 3;
 	private int bonbaKop = 10;
 	private boolean timerAktibatu = false; 
 	private boolean bonbaPrest = false;
+	private int iristera;
 	private int kont;
 	private int PERIODO = 3;
 	private Timer timer = null;
-	private BombaStrategy bombaMota;
-	private Queue<BombaStrategy> bonLista = new LinkedList<>();
+	private Bonba bonbaMota;
+	private Queue<Bonba> bonLista = new LinkedList<>();
 	
 	////////////ERAIKITZAILEA////////////
-	protected Bomberman(int pX, int pY, BombaStrategy pBombaStrategy) {
+	protected Bomberman(int pX, int pY, int pIritsi, Bonba pBonba) {
 		this.X = pX;
 		this.Y = pY;
 		this.aurreX = pX;
 		this.aurreY = pY;
-		this.bombaMota = pBombaStrategy;
-		this.bizitza = true;
+		this.iristera = pIritsi;
+		this.bonbaMota = pBonba;
+		this.bizirik = true;
 	}
 	
 	////////////GETTER eta SETTER////////////
@@ -65,8 +68,8 @@ public abstract class Bomberman {
 		this.aurreY = pAurY;
 	}
 
-	public void setBizitza(boolean b) {
-		bizitza = b;
+	public void setBizirik(boolean b) {
+		bizirik = b;
 	}
 	
 	public void setBonbaKop(int kop) {
@@ -74,7 +77,15 @@ public abstract class Bomberman {
 	}
 	
 	public boolean getBizitza() {
-		return this.bizitza;
+		return this.bizirik;
+	}
+	
+	public int getIritsi() {
+		return this.iristera;
+	}
+	
+	public void setIritsi(int pIritsi) {
+		this.iristera = pIritsi;
 	}
 
 	public boolean bonbaNahiko() {
@@ -122,31 +133,33 @@ public abstract class Bomberman {
 	
 	public boolean bombaJarri() {
 		boolean jarrita = false;
-		BombaStrategy bomba;
-		if(bombaMota != null && bonbaNahiko()) {
-			if (bombaMota instanceof BombaNormala) {
-				bomba = new BombaNormala();
+		Bonba bomba;
+		if(bonbaMota != null && bonbaNahiko()) {
+			if (bonbaMota instanceof BonbaNormala) {
+				bomba = new BonbaNormala();
 			}
 			else {
-				bomba = new BombaUltra();
+				bomba = new BonbaUltra();
 			}
 			bomba.setX(X);
 			bomba.setY(Y);
+			bomba.setRadioa(iristera);
 			bomba.timerHasi();
 			bonLista.add(bomba);
 			bonbaGutxitu();
 			jarrita = true;
 		}
-		else if (bombaMota != null && bonbaPrest) {
-			if (bombaMota instanceof BombaNormala) {
-				bomba = new BombaNormala();
+		else if (bonbaMota != null && bonbaPrest) {
+			if (bonbaMota instanceof BonbaNormala) {
+				bomba = new BonbaNormala();
 			}
 			else {
-				bomba = new BombaUltra();
+				bomba = new BonbaUltra();
 			}
 			bomba.setX(X);
 			bomba.setY(Y);
 			bomba.timerHasi();
+			bomba.setRadioa(iristera);
 			bonLista.add(bomba);
 			bonbaJarrita();
 			timerAktibatu();
@@ -156,12 +169,12 @@ public abstract class Bomberman {
 		
 	}
 	
-	public void aldatuBombaMota(BombaStrategy b) {
-		bombaMota = b;
+	public void aldatuBombaMota(Bonba b) {
+		bonbaMota = b;
 	}
 
 	public boolean bombarikDago(int i, int j) {
-		for (BombaStrategy bon : bonLista) {
+		for (Bonba bon : getBombaGuztiak()) {
 			if (bon.getX() == (getX()+i) && bon.getY() == (getY()+j)) {
 				return true;
 			}
@@ -170,7 +183,7 @@ public abstract class Bomberman {
 	}
 
 	public boolean bombarikEtsai(int x, int y) {
-		for (BombaStrategy bon : bonLista) {
+		for (Bonba bon : getBombaGuztiak()) {
 			if (bon != null) {
 				if (bon.getX() == x && bon.getY() == y) {
 					return true;
@@ -184,10 +197,27 @@ public abstract class Bomberman {
 		bonLista.remove();	
 	}
 	
+	private LinkedList<Bonba> getBombaGuztiak(){
+		return new LinkedList<Bonba>(bonLista);
+	}
+	
 	protected void biziTimer() {}
 	
 	protected void updateDenb() {}
 	
 	protected void timerAmatatu() {}
+
+	public boolean bizitzakDitu() {
+		return bizitzak>=0;
+	}
+
+	public void kenduBizitzak() {
+		bizitzak--;
+		
+	}
+
+	public int getBizitzak() {
+		return this.bizitzak;
+	}
 	
 }

@@ -2,6 +2,7 @@ package Pantailak;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 public class Sua {
 	private int X;
@@ -9,28 +10,31 @@ public class Sua {
 	private int kont;
 	private int PERIODO = 2;
 	private Timer timer = null;
-	private boolean piztuta = false;
 	
 	public Sua(int pX, int pY){
-	this.X = pX;
-	this.Y = pY;
-	kont = PERIODO;
-	TimerTask timerTask = new TimerTask() {
-		@Override
-		public void run() {
-			updateKont();
-		}		
-	};
-	timer = new Timer();
-	timer.scheduleAtFixedRate(timerTask, 0, 1000);
+		this.X = pX;
+		this.Y = pY;
+		kont = PERIODO;
+		
+		LaberintoEredua.getLabEredua().getExecutor().schedule(()->{
+			ezkonduSua();
+		}, PERIODO, TimeUnit.SECONDS);
+		
+//		TimerTask timerTask = new TimerTask() {
+//			@Override
+//			public void run() {
+//				updateKont();
+//			}		
+//		};
+//		timer = new Timer();
+//		timer.scheduleAtFixedRate(timerTask, 0, 1000);
 	}
 	
 	private void updateKont() {
 		kont--;
 		if (kont == 0) {
-			kont = PERIODO;
-			ezkonduSua();
 			timer.cancel();
+			ezkonduSua();
 		}
 	}
 	

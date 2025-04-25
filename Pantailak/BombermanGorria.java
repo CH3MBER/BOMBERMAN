@@ -11,7 +11,7 @@ public class BombermanGorria extends Bomberman {
 	
 	//private int bonbaKop = 10;
 	public BombermanGorria(int pX,int pY) { //Meter aqui lo del timer de bomberman
-		super(pX, pY, new BombaNormala());
+		super(pX, pY, 3, new BonbaNormala());
 		setBonbaKop(10);
 	}
 

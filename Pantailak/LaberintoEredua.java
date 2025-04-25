@@ -5,16 +5,18 @@ import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Queue;
 import java.util.Random;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 public class LaberintoEredua extends Observable{
 	
 	////////////ATRIBUTUAK////////////
 	private static LaberintoEredua nLE = null;
 	private Bomberman bomberman;
-	private Queue<BombaStrategy> bonbaLista = new LinkedList<>();
-	private Queue<Sua> suLista = new LinkedList<>();
+	private ArrayList<Sua> suLista = new ArrayList<>();
 	private Laberinto labMota;
-	
+	private static final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+	private boolean birsortzen = false;
 	
 	////////////ERAIKITZAILEA////////////
 	private LaberintoEredua() {
@@ -33,7 +35,7 @@ public class LaberintoEredua extends Observable{
 	public void eguneratu() {
 		// TODO Auto-generated method stub
 		setChanged();
-		notifyObservers(new int[] {1});
+		notifyObservers(new int[] {0, bomberman.getBizitzak()});
 		for (GelaxkaEredu gelaxka : labMota.getGelaZerr().erakutsiGelaxkaGuztiak())
 			gelaxka.eguneratu();
 	}
@@ -54,7 +56,7 @@ public class LaberintoEredua extends Observable{
 		bomberman.biziTimer();
 	}
 
-	public Queue<Sua> getSuLista() {
+	public ArrayList<Sua> getSuLista() {
 		return suLista;
 	}
 	
@@ -65,7 +67,11 @@ public class LaberintoEredua extends Observable{
     public void setLaberintoMota(Laberinto pLabMota) {
         labMota = pLabMota;
     }
-	
+    
+    public ScheduledExecutorService getExecutor() {
+    	return this.executor;
+    }
+    
 	////////////AUSAZKO ZENBAKIA////////////
 	public double ausazZenbakia() {
 		Random ram = new Random();
@@ -83,50 +89,46 @@ public class LaberintoEredua extends Observable{
 		boolean mugitu = false;
 		boolean erre = false;
 		boolean bonba = false;
-		if (!((this.bomberman.getX()+i<0) || (this.bomberman.getY()+j<0) || (this.bomberman.getX()+i>16) || (this.bomberman.getY()+j>10))){	//Bonberman-a tarteetan dagoela konprobatzen du
-			if((!((labMota.getbZerr().getBloke((this.bomberman.getX()+i),(this.bomberman.getY()+j)) instanceof Biguna) || (labMota.getbZerr().getBloke((this.bomberman.getX()+i),(this.bomberman.getY()+j)) instanceof Gogorra))) || (labMota.getbZerr().getBloke((this.bomberman.getX()+i),(this.bomberman.getY()+j)) == null)) {
-				if(!((bonbarikDago(i, j)) || !(this.bomberman.getBizitza()))){	//Bonberman-a blokeekin ez dela joko konprobatzen du
-					this.bomberman.setAurrekoX(this.bomberman.getX());	//Lehengo, aurreko posizioak eguneratzen ditu eta gero helduko den posizioa
-					this.bomberman.setAurrekoY(this.bomberman.getY());
-					bomberman.timerAmatatu();
-					if (labMota.getGelaZerr().aurkituGelaxka((this.bomberman.getY()+j)*17+this.bomberman.getX()+i).getMota() == 4) {
-						for(Sua su : suLista) {
-							if (su.getX() == (this.bomberman.getX()+i) && su.getY() == (this.bomberman.getY()+j)) {
-								su.ezkonduSua();
-							}
-						}
-						if (bomberman instanceof BombermanTxuria)
-							labMota.getGelaZerr().aurkituGelaxka((this.bomberman.getY()+j)*17+this.bomberman.getX()+i).setMota(14);
-						else
-							labMota.getGelaZerr().aurkituGelaxka((this.bomberman.getY()+j)*17+this.bomberman.getX()+i).setMota(40);
-						erre = true;
-						this.bomberman.setBizitza(false);
-					}
-					
-					if (labMota.getEtsaiLista().aurkituEtsai(bomberman.getX()+i, bomberman.getY()+j) != null) {
-						if(labMota.getEtsaiLista().aurkituEtsai(bomberman.getX()+i, bomberman.getY()+j).getBizitza()) {
+		if(!birsortzen) {
+			if (!((this.bomberman.getX()+i<0) || (this.bomberman.getY()+j<0) || (this.bomberman.getX()+i>16) || (this.bomberman.getY()+j>10))){	//Bonberman-a tarteetan dagoela konprobatzen du
+				if((!((labMota.getbZerr().getBloke((this.bomberman.getX()+i),(this.bomberman.getY()+j)) instanceof Biguna) || (labMota.getbZerr().getBloke((this.bomberman.getX()+i),(this.bomberman.getY()+j)) instanceof Gogorra))) || (labMota.getbZerr().getBloke((this.bomberman.getX()+i),(this.bomberman.getY()+j)) == null)) {
+					if(!((bonbarikDago(i, j)) || !(this.bomberman.getBizitza()))){	//Bonberman-a blokeekin ez dela joko konprobatzen du
+						this.bomberman.setAurrekoX(this.bomberman.getX());	//Lehengo, aurreko posizioak eguneratzen ditu eta gero helduko den posizioa
+						this.bomberman.setAurrekoY(this.bomberman.getY());
+						bomberman.timerAmatatu();
+						if (labMota.getGelaZerr().aurkituGelaxka((this.bomberman.getY()+j)*17+this.bomberman.getX()+i).getMota() == 4) {
+							suLista.removeIf(su -> su != null && this.bomberman.getX()+i == su.getX() && this.bomberman.getY()+j == su.getY());
 							if (bomberman instanceof BombermanTxuria)
 								labMota.getGelaZerr().aurkituGelaxka((this.bomberman.getY()+j)*17+this.bomberman.getX()+i).setMota(14);
 							else
 								labMota.getGelaZerr().aurkituGelaxka((this.bomberman.getY()+j)*17+this.bomberman.getX()+i).setMota(40);
 							erre = true;
-							this.bomberman.setBizitza(false);
 						}
-					}
-					
-					if (labMota.getGelaZerr().aurkituGelaxka((this.bomberman.getAurrekoY())*17+this.bomberman.getAurrekoX()).getMota() == 15 || labMota.getGelaZerr().aurkituGelaxka((this.bomberman.getAurrekoY())*17+this.bomberman.getAurrekoX()).getMota() == 39) {
-						if (bomberman instanceof BombermanTxuria)
-							labMota.getGelaZerr().aurkituGelaxka(this.bomberman.getY()*17+this.bomberman.getX()).setMota(3);
-						else
-							labMota.getGelaZerr().aurkituGelaxka(this.bomberman.getY()*17+this.bomberman.getX()).setMota(45);
-						bonba = true;
-					}
-					this.bomberman.setX(this.bomberman.getX()+i);
-					this.bomberman.setY(this.bomberman.getY()+j);
-					mugitu = true;
-					
-					bomberman.biziTimer();	//Bomberman gorria mugitu ostean Timer-a aktibatzen da berriz
-				}	
+						
+						if (labMota.getEtsaiLista().aurkituEtsai(bomberman.getX()+i, bomberman.getY()+j) != null) {
+							if(labMota.getEtsaiLista().aurkituEtsai(bomberman.getX()+i, bomberman.getY()+j).getBizitza()) {
+								if (bomberman instanceof BombermanTxuria)
+									labMota.getGelaZerr().aurkituGelaxka((this.bomberman.getY()+j)*17+this.bomberman.getX()+i).setMota(14);
+								else
+									labMota.getGelaZerr().aurkituGelaxka((this.bomberman.getY()+j)*17+this.bomberman.getX()+i).setMota(40);
+								erre = true;
+							}
+						}
+						
+						if (labMota.getGelaZerr().aurkituGelaxka((this.bomberman.getAurrekoY())*17+this.bomberman.getAurrekoX()).getMota() == 15 || labMota.getGelaZerr().aurkituGelaxka((this.bomberman.getAurrekoY())*17+this.bomberman.getAurrekoX()).getMota() == 39) {
+							if (bomberman instanceof BombermanTxuria)
+								labMota.getGelaZerr().aurkituGelaxka(this.bomberman.getY()*17+this.bomberman.getX()).setMota(3);
+							else
+								labMota.getGelaZerr().aurkituGelaxka(this.bomberman.getY()*17+this.bomberman.getX()).setMota(45);
+							bonba = true;
+						}
+						this.bomberman.setX(this.bomberman.getX()+i);
+						this.bomberman.setY(this.bomberman.getY()+j);
+						mugitu = true;
+						
+						bomberman.biziTimer();	//Bomberman gorria mugitu ostean Timer-a aktibatzen da berriz
+					}	
+				}
 			}
 		}
 		
@@ -136,16 +138,36 @@ public class LaberintoEredua extends Observable{
 			labMota.getGelaZerr().aurkituGelaxka((this.bomberman.getAurrekoY())*17+this.bomberman.getAurrekoX()).setMota(0);
 		
 		if(erre) {	//Erre bada Bomberman-a, orduan partida amaituko da
-		    System.out.print("\nPartida galdu duzu.");
-			javax.swing.Timer timer = new javax.swing.Timer(5, e -> partidaBukatu());
-		    timer.setRepeats(false);
-		    timer.start();
+			bomberman.kenduBizitzak();
+			bomberman.setBizirik(false);
+			if (!bomberman.bizitzakDitu()) {
+				this.bomberman.setBizirik(false);
+			    System.out.print("\nPartida galdu duzu.");
+				javax.swing.Timer timer = new javax.swing.Timer(5, e -> partidaBukatu());
+			    timer.setRepeats(false);
+			    timer.start();
+			}
+			else {
+				labMota.getGelaZerr().aurkituGelaxka(0).setMota(0);
+				birsortzen = true;
+				javax.swing.Timer timer = new javax.swing.Timer(2000, e-> birsortuDa());
+			    timer.setRepeats(false);
+			    timer.start();
+			}
 		}
+	}
+	
+	private void birsortuDa() {
+		bomberman.setX(0);
+		bomberman.setY(0);
+		labMota.getGelaZerr().aurkituGelaxka(0).setMota(5);
+		birsortzen = false;
+		bomberman.setBizirik(true);
 	}
 	
 	////////////NORABIDEA ZEHAZTU////////////
 	private void spriteAldatu(boolean erre, int pI, int pJ) {
-		if(!erre && !(labMota.getGelaZerr().aurkituGelaxka((this.bomberman.getY())*17+this.bomberman.getX()).getMota() == 15) && (this.bomberman.getBizitza())) {
+		if(!erre && !((labMota.getGelaZerr().aurkituGelaxka((this.bomberman.getY())*17+this.bomberman.getX()).getMota() == 15) || (labMota.getGelaZerr().aurkituGelaxka((this.bomberman.getY())*17+this.bomberman.getX()).getMota() == 39)) && (this.bomberman.getBizitza())) {
 			switch (pI){	//Mugimenduaren arabera "sprite" bat edo beste bat erakutsiko du
 			case -1:
 				if (bomberman instanceof BombermanTxuria) {
@@ -339,11 +361,7 @@ public class LaberintoEredua extends Observable{
 	
 	
 	public void amatatuSua(Sua sua) {
-		for(Sua su : suLista) {
-			if(sua.getX() == su.getX() && sua.getY() == su.getY()) {
-				suLista.remove(su);
-			}
-		}
+		suLista.removeIf(su -> su != null && sua.getX() == su.getX() && sua.getY() == su.getY());
 	}
 	
 	private boolean etsaiaSuaDu(int x, int y) {
