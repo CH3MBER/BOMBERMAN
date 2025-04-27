@@ -29,19 +29,7 @@ public class EtsaiZerrenda {
 	}
 	
 	public Etsai aurkituEtsai(int x, int y) {
-		boolean aurk = false;
-		Iterator<Etsai> itr = getIterator();
-		Etsai etsaia = null;
-		while (itr.hasNext() && aurk == false) {
-			etsaia = itr.next();
-			if (etsaia.getX() == x && etsaia.getY() == y) {
-				aurk = true;
-			}
-		}
-		if (aurk == false) {
-			etsaia = null;
-		}
-		return etsaia;
+		return erakutsiEtsaiGuztiak().stream().filter(e -> e.getX() == x && e.getY() == y).findFirst().orElse(null);
 	}
 	
 	public ArrayList<Etsai> erakutsiEtsaiGuztiak(){
@@ -53,11 +41,7 @@ public class EtsaiZerrenda {
 	}
 	
 	public boolean zerrendaHutsik() {
-		boolean hutsik = false;
-		if (this.etsaiZerrenda.size()==0) {
-			hutsik = true;
-		}
-		return hutsik;
+		return etsaiZerrenda.isEmpty();
 	}
-
+	
 }

@@ -32,17 +32,18 @@ public class HasieraPantailaEredu extends Observable{
 	////////////BOMBERMAN AUKERATU////////////
 	@SuppressWarnings("deprecation")
 	public void bombermanAukera(int aukera) {
-		if (!(bomberman == 0 && aukera == 1 || bomberman == 1 && aukera == -1)) {
-			if (aukera == 1)
-				bomberman = 0;	//Bomberman Txuria
-			else
-				bomberman = 1;	//Bomberman Beltza
-			/*
-				bomberman = 2;  //Bomberman Gorria
-			 */
+		if (!(bomberman == 0 && aukera == -1 || bomberman == 3 && aukera == 1)) {
+			bomberman+=aukera;
+		}
+//			if (aukera == 1)
+//				bomberman = 0;	//Bomberman Txuria
+//			else if(aukera == 2)
+//				bomberman = 1;	//Bomberman Beltza
+//			/*
+//				bomberman = 2;  //Bomberman Gorria
+//			 */
 			setChanged();
 			notifyObservers(new int[] {bomberman, laberinto});	//Aukera berriak bistaratzeko mezua
-		}
 	}
 	
 	////////////LABERINTOA AUKERATU////////////

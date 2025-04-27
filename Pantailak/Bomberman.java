@@ -72,10 +72,6 @@ public abstract class Bomberman {
 		bizirik = b;
 	}
 	
-	public void setBonbaKop(int kop) {
-		bonbaKop = kop;
-	}
-	
 	public boolean getBizitza() {
 		return this.bizirik;
 	}
@@ -88,6 +84,14 @@ public abstract class Bomberman {
 		this.iristera = pIritsi;
 	}
 
+	public int getBonbaKop() {
+		return this.bonbaKop;
+	}
+	
+	public void setBonbaKop(int pBonbaKop) {
+		this.bonbaKop = pBonbaKop;
+	}
+	
 	public boolean bonbaNahiko() {
 		return bonbaKop != 0;
 	}
@@ -99,17 +103,15 @@ public abstract class Bomberman {
 	}
 
 	public void timerAktibatu() {
-		if (!timerAktibatu) {
-			kont = PERIODO;
-			TimerTask timerTask = new TimerTask() {
-				@Override
-				public void run() {
-					updateKont();
-				}		
-			};
-			timer = new Timer();
-			timer.scheduleAtFixedRate(timerTask, 0, 1000);
-		}
+		kont = PERIODO;
+		TimerTask timerTask = new TimerTask() {
+			@Override
+			public void run() {
+				updateKont();
+			}		
+		};
+		timer = new Timer();
+		timer.scheduleAtFixedRate(timerTask, 0, 1000);
 	}
 	
 	public boolean denboraPasa() {
@@ -119,16 +121,15 @@ public abstract class Bomberman {
 	private void updateKont() {
 		kont--;
 		if (kont == 0) {
-			kont = PERIODO;
-			bonbaPrest = true;
 			System.out.print("\nBonba prest dago");
+			bonbaKop++;
+			bonbaJarrita();
 			timer.cancel();
 		}	
 	}
 
 	public void bonbaJarrita() {
-		bonbaPrest = false;
-		timerAktibatu = false;
+		LaberintoEredua.getLabEredua().layoutEguneratu();
 	}	
 	
 	public boolean bombaJarri() {
@@ -149,22 +150,6 @@ public abstract class Bomberman {
 			bonbaGutxitu();
 			jarrita = true;
 		}
-		else if (bonbaMota != null && bonbaPrest) {
-			if (bonbaMota instanceof BonbaNormala) {
-				bomba = new BonbaNormala();
-			}
-			else {
-				bomba = new BonbaUltra();
-			}
-			bomba.setX(X);
-			bomba.setY(Y);
-			bomba.timerHasi();
-			bomba.setRadioa(iristera);
-			bonLista.add(bomba);
-			bonbaJarrita();
-			timerAktibatu();
-			jarrita = true;
-		}
 		return jarrita;
 		
 	}
@@ -174,30 +159,18 @@ public abstract class Bomberman {
 	}
 
 	public boolean bombarikDago(int i, int j) {
-		for (Bonba bon : getBombaGuztiak()) {
-			if (bon.getX() == (getX()+i) && bon.getY() == (getY()+j)) {
-				return true;
-			}
-		}
-		return false;
+		return getBonbaGuztiak().stream().anyMatch(b -> b.getX() == (getX()+i) && b.getY() == (getY()+j));
 	}
 
 	public boolean bombarikEtsai(int x, int y) {
-		for (Bonba bon : getBombaGuztiak()) {
-			if (bon != null) {
-				if (bon.getX() == x && bon.getY() == y) {
-					return true;
-				}
-			}
-		}
-		return false;
+		return getBonbaGuztiak().stream().anyMatch(b -> b != null && b.getX() == x && b.getY() == y);
 	}
 
 	public void bonbaKendu() {
 		bonLista.remove();	
 	}
 	
-	private LinkedList<Bonba> getBombaGuztiak(){
+	private LinkedList<Bonba> getBonbaGuztiak(){
 		return new LinkedList<Bonba>(bonLista);
 	}
 	

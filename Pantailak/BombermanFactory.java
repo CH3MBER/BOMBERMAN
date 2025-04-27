@@ -20,11 +20,14 @@ public class BombermanFactory {
 		if(i == 1) {         //Bomberman Txuria sortu
 			bomberman = new BombermanTxuria(pX,pY);
 		}
-		else if(i == 2) {   //Bomberman Beltza sortu
+		else if(i == 2) {   //Bomberman Urdina sortu
 			bomberman = new BombermanBeltza(pX, pY);
 		}
 		else if(i == 3) {	//Bomberman Gorria sortu
 			bomberman = new BombermanGorria(pX,pY);
+		}
+		else if(i == 4) {  	//Bomberman Beltza sortu
+			bomberman = new BombermanBeltza(pX, pY);
 		}
 		return bomberman;
 	}

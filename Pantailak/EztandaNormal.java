@@ -91,7 +91,7 @@ public class EztandaNormal implements BonbaStrategy{
 				lE.getBomberman().setBizirik(false);
 				hil=true;
 			}else if(LaberintoEredua.getLabEredua().getLabMota().getEtsaiLista().aurkituEtsai(pBonba.getX(), y)!=null) {
-				LaberintoEredua.getLabEredua().getLabMota().getEtsaiLista().aurkituEtsai(pBonba.getX(), x).setBizitza(false);
+				LaberintoEredua.getLabEredua().getLabMota().getEtsaiLista().aurkituEtsai(pBonba.getX(), y).setBizitza(false);
 				LaberintoEredua.getLabEredua().getLabMota().getEtsaiLista().ezabatuEtsai(LaberintoEredua.getLabEredua().getLabMota().getEtsaiLista().aurkituEtsai(pBonba.getX(), y));
 				LaberintoEredua.getLabEredua().getLabMota().getGelaZerr().aurkituGelaxka(y*17+pBonba.getX()).setMota(4);
 			}else if(!(LaberintoEredua.getLabEredua().getLabMota().getGelaZerr().aurkituGelaxka(y*17+pBonba.getX()).getMota()==3)) {

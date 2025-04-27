@@ -29,18 +29,7 @@ public class BlokeZerrenda {
 	}
 	
 	public Bloke getBloke(int X, int Y) {
-		Iterator<Bloke> iter=getIter();
-		Bloke pBloke = null;
-		boolean aurkitua = false;
-		while(iter.hasNext() && !aurkitua) {
-			pBloke=iter.next();
-			if (pBloke.getPosizioa()[0]== X && pBloke.getPosizioa()[1]== Y) {
-				aurkitua = true;
-			}
-		}
-		if(!aurkitua)
-			pBloke = null;
-		return pBloke;
+		return this.getBlokeGuztiak().stream().filter(b -> b != null && b.getPosizioa()[0] == X && b.getPosizioa()[1]== Y).findFirst().orElse(null);
 	}
 	
 	public ArrayList<Bloke> getBlokeGuztiak(){
@@ -48,24 +37,11 @@ public class BlokeZerrenda {
 	}
 	
 	public void eztandaEginPosizioan(int x, int y) {
-		Iterator<Bloke> iter=getIter();
-		while(iter.hasNext()) {
-			Bloke pBloke=iter.next();
-			if (pBloke.getPosizioa()[0] == x && pBloke.getPosizioa()[1] == y && (pBloke instanceof Biguna)) {
-//				((Biguna)pBloke).eztandaEgin();
-//				deleteBloke(pBloke.getPosizioa()[0], pBloke.getPosizioa()[1]);
-				pBloke.motaAldatu(new EztandaHutsa());
-				break;
-			}
-		}
+		blokeZerrenda.stream().filter(b -> b != null && b.getPosizioa()[0] == x && b.getPosizioa()[1] == y && (b instanceof Biguna)).findFirst().ifPresent(b -> {((Biguna)b).eztandaEgin(); deleteBloke(b.getPosizioa()[0], b.getPosizioa()[1]);});
 	}
 	
 	public void blokeakInprimatu() {
-		Iterator<Bloke> iter=getIter();
-		while(iter.hasNext()) {
-			Bloke bloke=iter.next();
-			System.out.println("Posizioa: ("+bloke.getPosizioa()[0]+ ", "+bloke.getPosizioa()[1]+") Dago"+bloke.badago());
-		}
+		blokeZerrenda.stream().forEach(bloke -> System.out.println("Posizioa: ("+bloke.getPosizioa()[0]+ ", "+bloke.getPosizioa()[1]+") Dago"+bloke.badago()));
 	}
 
 	public boolean blokeBigunaDu() {

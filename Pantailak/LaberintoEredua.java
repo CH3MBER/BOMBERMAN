@@ -31,13 +31,11 @@ public class LaberintoEredua extends Observable{
 	}
 	
 	////////////EGUNERAKETA HASIERAN////////////
-	@SuppressWarnings("deprecation")
 	public void eguneratu() {
 		// TODO Auto-generated method stub
 		setChanged();
-		notifyObservers(new int[] {0, bomberman.getBizitzak()});
-		for (GelaxkaEredu gelaxka : labMota.getGelaZerr().erakutsiGelaxkaGuztiak())
-			gelaxka.eguneratu();
+		notifyObservers(new int[] {-1, bomberman.getBizitzak(), bomberman.getBonbaKop()});
+		labMota.getGelaZerr().erakutsiGelaxkaGuztiak().stream().forEach(GelaxkaEredu::eguneratu);
 	}
 	
 	////////////GETTER eta SETTER////////////
@@ -69,7 +67,7 @@ public class LaberintoEredua extends Observable{
     }
     
     public ScheduledExecutorService getExecutor() {
-    	return this.executor;
+    	return LaberintoEredua.executor;
     }
     
 	////////////AUSAZKO ZENBAKIA////////////
@@ -157,12 +155,15 @@ public class LaberintoEredua extends Observable{
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	private void birsortuDa() {
 		bomberman.setX(0);
 		bomberman.setY(0);
 		labMota.getGelaZerr().aurkituGelaxka(0).setMota(5);
 		birsortzen = false;
 		bomberman.setBizirik(true);
+		setChanged();
+		notifyObservers(new int[] {bomberman.getBizitzak(), bomberman.getBonbaKop()});
 	}
 	
 	////////////NORABIDEA ZEHAZTU////////////
@@ -254,6 +255,7 @@ public class LaberintoEredua extends Observable{
 	}
 
 	////////////BONBA JARRI////////////
+	@SuppressWarnings("deprecation")
 	public void bonbaJarri() {
 		if (this.bomberman.bombaJarri()) {
 			if (bomberman instanceof BombermanTxuria)	//Bomberman-aren arabera bonbaren sprite bat edo beste bat jarriko ad
@@ -261,6 +263,8 @@ public class LaberintoEredua extends Observable{
 			else
 				labMota.getGelaZerr().aurkituGelaxka(this.bomberman.getY()*17+this.bomberman.getX()).setMota(39);
 		}
+		setChanged();
+		notifyObservers(new int[] {bomberman.getBizitzak(), bomberman.getBonbaKop()});
 	}
 
 	////////////PARTIDA BUKATU////////////
@@ -323,7 +327,7 @@ public class LaberintoEredua extends Observable{
 				break;
 			case 3:
 				if (y+1<=10){
-					if((!(((labMota.getbZerr().getBloke(x,y+1)) instanceof Gogorra) || ((labMota.getbZerr().getBloke(x,y+1)) instanceof Biguna))) || (labMota.getbZerr().getBloke(y+1)) == null) {
+					if((!(((labMota.getbZerr().getBloke(x,y+1)) instanceof Gogorra) || ((labMota.getbZerr().getBloke(x,y+1)) instanceof Biguna))) || (labMota.getbZerr().getBloke(x,y+1)) == null) {
 						if(!((etsaiBonba(x, y+1)) || !(etsai.getBizitza()) || etsaiaSuaDu(x,y+1) || etsaiaDago(x,y+1, etsai))){
 							labMota.getGelaZerr().aurkituGelaxka((y)*17+x).setMota(0);
 							labMota.getGelaZerr().aurkituGelaxka((y+1)*17+x).setMota(20);
@@ -357,22 +361,28 @@ public class LaberintoEredua extends Observable{
 	private boolean etsaiBonba(int x, int y) {
 		return bomberman.bombarikEtsai(x,y);
 	}
-	
-	
-	
+
 	public void amatatuSua(Sua sua) {
-		suLista.removeIf(su -> su != null && sua.getX() == su.getX() && sua.getY() == su.getY());
+		getSuGuztiak().removeIf(su -> su != null && sua.getX() == su.getX() && sua.getY() == su.getY());
 	}
 	
 	private boolean etsaiaSuaDu(int x, int y) {
-		for (Sua su :suLista) {
+		for (Sua su : getSuGuztiak()) {
 			if(su.getX() == x && su.getY() == y) {
 				return true;
 			}
 		}
 		return false;
 	}
+
+	public void layoutEguneratu() {
+		setChanged();
+		notifyObservers(new int[] {bomberman.getBizitzak(), bomberman.getBonbaKop()});	
+	}
 	
+	private Queue<Sua> getSuGuztiak() {
+		return new LinkedList<Sua>(suLista);
+	}
 	
 	
 
