@@ -1,4 +1,4 @@
-package Pantailak;
+package bomberman;
 
 public class PowerUPFactory {
 	
@@ -19,10 +19,10 @@ public class PowerUPFactory {
 	public PowerUP sortuPowerUP(int pMota, int pX, int pY) {
 		PowerUP nirePUP = null;
 		if (pMota == 1) {
-			nirePUP = new Izarra(pX,pY);	//Bloke gogorra sortu
+			nirePUP = new Izarra(pX,pY);	//Izar berria sortu
 		}
-//		else if (pMota == 2){
-//			nirePUP = null	//Bloke biguna sortu
+		else if (pMota == 2){
+			nirePUP = new Bihotza(pX,pY);	//Bihotz berria sortu
 //		}
 //		else {
 //			nirePUP = null	//Bloke hutsa sortu

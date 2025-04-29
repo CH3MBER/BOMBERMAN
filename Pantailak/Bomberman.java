@@ -1,4 +1,4 @@
-package Pantailak;
+package bomberman;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -7,6 +7,7 @@ import java.util.TimerTask;
 
 public abstract class Bomberman {
 	
+	private static final Object IzarraEfektua = null;
 	////////////ATRIBUTUAK////////////
 	protected int X;
 	protected int Y;
@@ -23,6 +24,8 @@ public abstract class Bomberman {
 	private Timer timer = null;
 	private Bonba bonbaMota;
 	private Queue<Bonba> bonLista = new LinkedList<>();
+	private PowerUpEfektua efektua;
+	private boolean efektuaAktibatuta = false;
 	
 	////////////ERAIKITZAILEA////////////
 	protected Bomberman(int pX, int pY, int pIritsi, Bonba pBonba) {
@@ -72,6 +75,10 @@ public abstract class Bomberman {
 		bizirik = b;
 	}
 	
+	public void setBizitzak(int i) {
+		bizitzak = i;
+	}
+	
 	public boolean getBizitza() {
 		return this.bizirik;
 	}
@@ -90,6 +97,18 @@ public abstract class Bomberman {
 	
 	public void setBonbaKop(int pBonbaKop) {
 		this.bonbaKop = pBonbaKop;
+	}
+	
+	public int getBizitzak() {
+		return this.bizitzak;
+	}
+	
+	public boolean getEfektuaAkt() {
+		return efektuaAktibatuta;
+	}
+	
+	public void setEfektuaAkt(boolean pAktibo) {
+		efektuaAktibatuta = pAktibo;
 	}
 	
 	public boolean bonbaNahiko() {
@@ -174,6 +193,11 @@ public abstract class Bomberman {
 		return new LinkedList<Bonba>(bonLista);
 	}
 	
+	public void aldatuEfektua(PowerUpEfektua pEfektua) {
+
+			efektua = pEfektua;
+	}
+	
 	protected void biziTimer() {}
 	
 	protected void updateDenb() {}
@@ -188,9 +212,20 @@ public abstract class Bomberman {
 		bizitzak--;
 		
 	}
-
-	public int getBizitzak() {
-		return this.bizitzak;
+	
+	public void powerUpEfektua() {
+		PowerUpEfektua efekt = efektua;
+		int bizitzaKop = bizitzak;
+		if (efektuaAktibatuta == true) {
+			if(efekt.equals(IzarraEfektua)) {
+				bizitzak = bizitzaKop;
+			}
+		}
+		else {
+			bizitzak --;
+		}
+			
 	}
+
 	
 }
