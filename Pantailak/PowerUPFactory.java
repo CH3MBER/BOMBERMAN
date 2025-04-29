@@ -23,11 +23,12 @@ public class PowerUPFactory {
 		}
 		else if (pMota == 2){
 			nirePUP = new Bihotza(pX,pY);	//Bihotz berria sortu
-//		}
+		}
 //		else {
 //			nirePUP = null	//Bloke hutsa sortu
 //		}
 		return nirePUP;
-	}
+		}
 
 }
+	
